@@ -28,6 +28,9 @@ gem 'bootsnap', '>= 1.4.4', require: false
 # gem 'dotenv', '~> 2.7.6'
 gem 'dotenv-rails', groups: [:development, :test]
 
+#Use Rubocop for code quality
+#gem 'rubocop', '~> 1.22.3'
+gem 'rubocop', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
