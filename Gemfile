@@ -56,3 +56,5 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 # For password hashing
 gem 'bcrypt', '~> 3.1'
+
+gem 'rspec-rails', '~> 5.0'
