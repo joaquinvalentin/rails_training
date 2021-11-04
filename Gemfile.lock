@@ -173,13 +173,13 @@ PLATFORMS
 DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug
-  dotenv-rails
+  dotenv-rails (~> 2.7.6)
   listen (~> 3.3)
   pg (~> 1.1)
   puma (~> 5.0)
   rails (~> 6.1.4, >= 6.1.4.1)
-  rubocop
-  rubocop-rspec
+  rubocop (~> 1.22.3)
+  rubocop-rspec (~> 2.5.0)
   spring
   tzinfo-data
 

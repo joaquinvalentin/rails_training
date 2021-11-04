@@ -35,14 +35,6 @@ Style/ClassAndModuleChildren:
 Style/Documentation:
   Enabled: false
 
-Style/StringLiterals:
-  Exclude:
-    - 'db/schema.rb'
-
-Style/MixinUsage:
-  Exclude:
-    - 'db/seeds.rb'
-
 Layout/IndentationWidth:
   Enabled: false
 
