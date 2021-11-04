@@ -130,7 +130,7 @@ RSpec/StubbedMock:
   Enabled: false
 
 RSpec/ExampleLength:
-  Max: 30
+  Max: 15
 
 RSpec/DescribeClass:
   Exclude:
