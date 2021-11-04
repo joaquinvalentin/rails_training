@@ -1,113 +1,56 @@
-# This is the configuration used to check the rubocop source code.
 require:
   - rubocop-rspec
 
 AllCops:
-  NewCops: enable
   Exclude:
-    - "spec/fixtures/**/*"
-    - ".git/**/*"
-    - bin/**/*
-    - db/**/*
-    - tmp/**/*
+    - 'db/schema.rb'
     - vendor/**/*
+    - bin/**/*
     - log/**/*
-    - node_modules/**/*
-    - Rakefile
-    - config/initializers/*
-  TargetRubyVersion: 2.5
-  SuggestExtensions: false
 
-Naming/PredicateName:
-  # Method define macros for dynamically generated method.
-  MethodDefinitionMacros:
-    - define_method
-    - define_singleton_method
-    - def_node_matcher
-    - def_node_search
+Metrics/AbcSize:
+  Max: 16
 
-Style/AccessorGrouping:
+Metrics/LineLength:
+  Max: 120
   Exclude:
-    - lib/rubocop/formatter/base_formatter.rb
-    - lib/rubocop/cop/offense.rb
+    - 'db/seeds.rb'
+    - 'config/initializers/*.rb'
 
-Style/FormatStringToken:
-  # Because we parse a lot of source codes from strings. Percent arrays
-  # look like unannotated format string tokens to this cop.
-  Exclude:
-    - spec/**/*
-
-Style/IpAddresses:
-  # The test for this cop includes strings that would cause offenses
-  Exclude:
-    - spec/rubocop/cop/style/ip_addresses_spec.rb
-
-Style/ClassAndModuleChildren:
-  # Because we parse a lot of source codes from strings. Percent arrays
-  # look like unannotated format string tokens to this cop.
-  Exclude:
-    - spec/**/*
-
-Layout/EndOfLine:
-  EnforcedStyle: lf
-
-Layout/ClassStructure:
-  Enabled: true
-
-Layout/RedundantLineBreak:
-  Enabled: true
-
-Layout/TrailingWhitespace:
-  AllowInHeredoc: false
-
-Lint/AmbiguousBlockAssociation:
-  Exclude:
-    - "spec/**/*.rb"
-
-Layout/HashAlignment:
-  EnforcedHashRocketStyle:
-    - key
-    - table
-  EnforcedColonStyle:
-    - key
-    - table
-
-Layout/LineLength:
-  Max: 100
-  IgnoredPatterns:
-    - !ruby/regexp /\A +(it|describe|context|shared_examples|include_examples|it_behaves_like) ["']/
-
-Lint/InterpolationCheck:
-  Exclude:
-    - "spec/**/*.rb"
-
-Lint/UselessAccessModifier:
-  MethodCreatingMethods:
-    - "def_matcher"
-    - "def_node_matcher"
+Metrics/MethodLength:
+  Max: 15
 
 Metrics/BlockLength:
+  Max: 30
   Exclude:
-    - "Rakefile"
-    - "**/*.rake"
-    - "spec/**/*.rb"
-    - "**/*.gemspec"
+    - 'Rakefile'
+    - '**/*.rake'
+    - 'spec/**/*.rb'
+    - 'config/environments/*.rb'
+    - 'config/routes.rb'
 
-Metrics/ClassLength:
-  Exclude:
-    - lib/rubocop/config_obsoletion.rb
+Style/ClassAndModuleChildren:
+  Enabled: false
 
-Metrics/ModuleLength:
-  Exclude:
-    - "spec/**/*.rb"
+Style/Documentation:
+  Enabled: false
 
-Naming/InclusiveLanguage:
-  FlaggedTerms:
-    offence:
-      Suggestions:
-        - offense
+Style/StringLiterals:
   Exclude:
-    - lib/rubocop/cop/naming/inclusive_language.rb
+    - 'db/schema.rb'
+
+Style/MixinUsage:
+  Exclude:
+    - 'db/seeds.rb'
+
+Layout/IndentationWidth:
+  Enabled: false
+
+Layout/ElseAlignment:
+  Enabled: false
+
+Layout/EndAlignment:
+  Enabled: false
 
 RSpec/FilePath:
   Exclude:
