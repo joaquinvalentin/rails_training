@@ -34,6 +34,9 @@ gem 'dotenv-rails', '~> 2.7.6'
 # gem 'rubocop', '~> 1.22.3'
 gem 'rubocop', '~> 1.22.3', require: false
 
+# User rspec for tests
+gem 'rspec', '~> 3.10.0'
+
 # Use Rubocop-rspec for code quality in tests
 gem 'rubocop-rspec', '~> 2.5.0', require: false
 
@@ -50,3 +53,6 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+
+# For password hashing
+gem 'bcrypt', '~> 3.1'
