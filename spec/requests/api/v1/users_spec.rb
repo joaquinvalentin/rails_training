@@ -55,5 +55,17 @@ RSpec.describe 'Api::V1::Users', type: :request do
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
+
+    describe 'DELETE /index' do
+      def delete_user_call(user_to_destroy)
+        delete api_v1_user_path(user_to_destroy)
+      end
+
+      context 'when is succesful' do
+        before { delete_user_call(user) }
+
+        it { expect(response).to have_http_status(:no_content) }
+      end
+    end
   end
 end
