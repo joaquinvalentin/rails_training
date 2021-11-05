@@ -32,4 +32,28 @@ RSpec.describe 'Api::V1::Users', type: :request do
       it { expect(response).to have_http_status(:created) }
     end
   end
+
+  describe 'PATCH /index' do
+    def update_user_call(user_params)
+      patch api_v1_user_path(user), params: { user: user_params }
+    end
+
+    context 'when is succesful' do
+      let(:user_params) { { email: user.email, password: '123456' } }
+
+      before { update_user_call(user_params) }
+
+      it { expect(response).to have_http_status(:success) }
+    end
+
+    context 'when params are invalid' do
+      let(:user_params) { { email: 'bad_email', password: '123456' } }
+
+      before { update_user_call(user_params) }
+
+      it 'will not update user' do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
 end
