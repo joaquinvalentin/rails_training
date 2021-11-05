@@ -1,0 +1,72 @@
+require:
+  - rubocop-rspec
+
+AllCops:
+  Exclude:
+    - 'db/schema.rb'
+    - vendor/**/*
+    - bin/**/*
+    - log/**/*
+
+Metrics/AbcSize:
+  Max: 16
+
+Metrics/LineLength:
+  Max: 120
+  Exclude:
+    - 'db/seeds.rb'
+    - 'config/initializers/*.rb'
+
+Metrics/MethodLength:
+  Max: 15
+
+Metrics/BlockLength:
+  Max: 30
+  Exclude:
+    - 'Rakefile'
+    - '**/*.rake'
+    - 'spec/**/*.rb'
+    - 'config/environments/*.rb'
+    - 'config/routes.rb'
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Layout/IndentationWidth:
+  Enabled: false
+
+Layout/ElseAlignment:
+  Enabled: false
+
+Layout/EndAlignment:
+  Enabled: false
+
+RSpec/FilePath:
+  Exclude:
+    - spec/rubocop/cop/internal_affairs/redundant_let_rubocop_config_new_spec.rb
+    - spec/rubocop/formatter/junit_formatter_spec.rb
+
+RSpec/PredicateMatcher:
+  EnforcedStyle: explicit
+
+RSpec/MessageSpies:
+  EnforcedStyle: receive
+
+RSpec/NestedGroups:
+  Max: 7
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/StubbedMock:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Max: 15
+
+RSpec/DescribeClass:
+  Exclude:
+    - spec/project/**/*.rb
