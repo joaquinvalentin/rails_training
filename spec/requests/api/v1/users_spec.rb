@@ -18,4 +18,18 @@ RSpec.describe 'Api::V1::Users', type: :request do
       end
     end
   end
+
+  describe 'POST /index' do
+    def create_call(user_params)
+      post api_v1_users_path, params: { user: user_params }
+    end
+
+    context 'when is succesful' do
+      let(:new_user) { { email: 'test@test.org', password: '123456' } }
+
+      before { create_call(new_user) }
+
+      it { expect(response).to have_http_status(:created) }
+    end
+  end
 end
