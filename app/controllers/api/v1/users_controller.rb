@@ -31,6 +31,10 @@ class Api::V1::UsersController < ApplicationController
     head :no_content
   end
 
+  rescue_from ActiveRecord::RecordNotFound do
+    render json: { error: 'User not found' }, status: :not_found
+  end
+
   private
 
   # Only allow a trusted parameter "white list" through.
