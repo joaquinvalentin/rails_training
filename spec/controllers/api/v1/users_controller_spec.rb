@@ -63,7 +63,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       it 'returns a error' do
-        expect(JSON.parse(response.body)).to include('email' => ['is invalid'])
+        expect(JSON.parse(response.body)).to include('email' => ['is not an email'])
       end
     end
   end
@@ -93,7 +93,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       before { update_user_call(user_params) }
 
       it 'returns a error' do
-        expect(JSON.parse(response.body)).to include('email' => ['is invalid'])
+        expect(JSON.parse(response.body)).to include('email' => ['is not an email'])
       end
 
       it 'error status is 422' do
@@ -112,6 +112,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       it 'returns no content' do
         expect(response).to have_http_status(:no_content)
+      end
+
+      it 'destroy the user' do
+        expect(User.find_by(id: user.id).nil?).to be(true)
       end
     end
 
