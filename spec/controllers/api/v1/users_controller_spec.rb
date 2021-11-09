@@ -17,7 +17,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       it 'returns the user' do
         # Test to ensure response contains the correct email
-        expect(JSON.parse(response.body)).to include('email' => user.email)
+        expect(JSON.parse(response.body)['email']).to eql(user.email)
       end
     end
 
@@ -29,7 +29,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       it 'returns the error message' do
-        expect(response.body).to include('User not found')
+        expect(JSON.parse(response.body)['error']).to eql('User not found')
       end
     end
   end
@@ -49,7 +49,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       it 'returns the user' do
-        expect(JSON.parse(response.body)).to include('email' => new_user[:email])
+        expect(JSON.parse(response.body)['email']).to eql(new_user[:email])
       end
     end
 
@@ -63,7 +63,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       it 'returns a error' do
-        expect(JSON.parse(response.body)).to include('email' => ['is not an email'])
+        expect(JSON.parse(response.body)['error']).to eql(['is not an email'])
       end
     end
   end
@@ -83,7 +83,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       it 'returns the user' do
-        expect(JSON.parse(response.body)).to include('email' => 'email@dominio.com')
+        expect(JSON.parse(response.body)['email']).to eql('email@dominio.com')
       end
     end
 
@@ -93,7 +93,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       before { update_user_call(user_params) }
 
       it 'returns a error' do
-        expect(JSON.parse(response.body)).to include('email' => ['is not an email'])
+        expect(JSON.parse(response.body)['error']).to eql(['is not an email'])
       end
 
       it 'error status is 422' do
@@ -127,7 +127,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       it 'returns the error message' do
-        expect(response.body).to include('User not found')
+        expect(JSON.parse(response.body)['error']).to eql('User not found')
       end
     end
   end
