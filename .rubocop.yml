@@ -51,7 +51,8 @@ RSpec/FilePath:
 
 RSpec/PredicateMatcher:
   EnforcedStyle: explicit
-
+  AllowedExplicitMatchers:
+    - have_http_status
 RSpec/MessageSpies:
   EnforcedStyle: receive
 
