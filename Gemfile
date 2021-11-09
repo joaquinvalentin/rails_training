@@ -64,5 +64,8 @@ gem 'simplecov', '~> 0.21.2', require: false, group: :test
 
 # For create entities with factory_bot
 group :development, :test do
-  gem 'factory_bot_rails'
+  gem 'factory_bot_rails', '~> 6.2.0'
 end
+
+# For create fake data
+gem 'faker', '~> 2.19.0', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
