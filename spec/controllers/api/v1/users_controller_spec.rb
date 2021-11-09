@@ -8,10 +8,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   let(:user) { users(:one) }
 
   describe 'GET #show' do
-    context 'when is succesful' do
+    context 'when is successful' do
       before { get :show, params: { id: user.id } }
 
-      it 'return succesful' do
+      it 'return successful' do
         expect(response).to have_http_status(:success)
       end
 
@@ -21,7 +21,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
     end
 
-    context 'when is not succesful' do
+    context 'when is not successful' do
       before { get :show, params: { id: 0 } }
 
       it 'returns not found' do
@@ -39,7 +39,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       post :create, params: { user: user_params }
     end
 
-    context 'when is succesful' do
+    context 'when is successful' do
       let(:new_user) { { email: 'test@test.org', password: '123456' } }
 
       before { create_call(new_user) }
@@ -53,7 +53,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
     end
 
-    context 'when is not succesful' do
+    context 'when is not successful' do
       let(:new_user) { { email: 'test.org', password: '123456' } }
 
       before { create_call(new_user) }
@@ -73,12 +73,12 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       put :update, params: { id: user.id, user: user_params }
     end
 
-    context 'when is succesful' do
+    context 'when is successful' do
       let(:user_params) { { email: 'email@dominio.com', password: '123456' } }
 
       before { update_user_call(user_params) }
 
-      it 'returns succesful' do
+      it 'returns successful' do
         expect(response).to have_http_status(:success)
       end
 
@@ -107,7 +107,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       delete :destroy, params: { id: user_to_destroy }
     end
 
-    context 'when is succesful' do
+    context 'when is successful' do
       before { delete_user_call(user) }
 
       it 'returns no content' do
@@ -119,7 +119,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
     end
 
-    context 'when is not succesful' do
+    context 'when is not successful' do
       before { delete_user_call(user.id + 1) }
 
       it 'returns not found' do
