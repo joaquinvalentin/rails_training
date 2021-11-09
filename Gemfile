@@ -61,3 +61,8 @@ gem 'rspec-rails', '~> 5.0'
 
 # For code coverage
 gem 'simplecov', '~> 0.21.2', require: false, group: :test
+
+# For create entities with factory_bot
+group :development, :test do
+  gem 'factory_bot_rails'
+end
