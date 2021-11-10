@@ -4,8 +4,7 @@ require 'rails_helper'
 require 'json'
 
 RSpec.describe Api::V1::UsersController, type: :controller do
-  fixtures :users
-  let(:user) { users(:one) }
+  let(:user) { create(:user) }
 
   describe 'GET #show' do
     context 'when is successful' do
