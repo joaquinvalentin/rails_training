@@ -70,5 +70,4 @@ end
 # For create fake data
 gem 'faker', '~> 2.19.0', git: 'https://github.com/faker-ruby/faker.git', branch: 'master'
 
-# For serialization
-gem 'jsonapi-serializer', '~> 2.2.0'
+gem 'jwt', '~> 2.3'
