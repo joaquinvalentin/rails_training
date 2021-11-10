@@ -16,7 +16,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       it 'returns the user' do
         # Test to ensure response contains the correct email
-        expect(JSON.parse(response.body)['email']).to eql(user.email)
+        expect(JSON.parse(response.body)['data']['attributes']['email']).to eql(user.email)
       end
     end
 
@@ -48,7 +48,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       it 'returns the user' do
-        expect(JSON.parse(response.body)['email']).to eql(new_user[:email])
+        expect(JSON.parse(response.body)['data']['attributes']['email']).to eql(new_user[:email])
       end
     end
 
@@ -82,7 +82,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       it 'returns the user' do
-        expect(JSON.parse(response.body)['email']).to eql('email@dominio.com')
+        expect(JSON.parse(response.body)['data']['attributes']['email']).to eql('email@dominio.com')
       end
     end
 

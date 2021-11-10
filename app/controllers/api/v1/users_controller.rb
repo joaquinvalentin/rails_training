@@ -12,7 +12,7 @@ class Api::V1::UsersController < ApplicationController
     if user.save
       render json: UserSerializer.new(user).serializable_hash, status: :created
     else
-      render json: UserSerializer.new(user).serializable_hash.errors, status: :unprocessable_entity
+      render json: user.errors, status: :unprocessable_entity
     end
   end
 
@@ -21,7 +21,7 @@ class Api::V1::UsersController < ApplicationController
     if user.update(user_params)
       render json: UserSerializer.new(user).serializable_hash, status: :ok
     else
-      render json: UserSerializer.new(user).serializable_hash.errors, status: :unprocessable_entity
+      render json: user.errors, status: :unprocessable_entity
     end
   end
 
