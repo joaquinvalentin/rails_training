@@ -7,9 +7,4 @@ FactoryBot.define do
     email { Faker::Internet.email }
     password { Faker::Internet.password }
   end
-
-  factory :users do
-    FactoryBot.create_list(:user, 10)
-  end
 end
-

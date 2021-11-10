@@ -68,4 +68,4 @@ group :development, :test do
 end
 
 # For create fake data
-gem 'faker', '~> 2.19.0', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
+gem 'faker', '~> 2.19.0', git: 'https://github.com/faker-ruby/faker.git', branch: 'master'
