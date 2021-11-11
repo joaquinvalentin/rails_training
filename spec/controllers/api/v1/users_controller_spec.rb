@@ -107,10 +107,23 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
     end
 
-    context 'when is not successful' do
+    context 'when headers are nil' do
       let(:user_params) { { email: 'email@dominio.com', password: '123456' } }
 
       before { update_user_call(user_params, {}) }
+
+      it 'returns forbidden' do
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context 'when token is invalid' do
+      let(:user_params) { { email: 'email@dominio.com', password: '123456' } }
+      let(:headers) do
+        { 'Authorization': JsonWebToken.encode(user_id: user.id + 1) }
+      end
+
+      before { update_user_call(user_params, headers) }
 
       it 'returns forbidden' do
         expect(response).to have_http_status(:forbidden)
@@ -147,12 +160,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       before { delete_user_call(user.id + 1, headers) }
 
-      it 'returns not found' do
-        expect(response).to have_http_status(:not_found)
-      end
-
-      it 'returns the error message' do
-        expect(JSON.parse(response.body)['error']).to eql('User not found')
+      it 'returns forbidden' do
+        expect(response).to have_http_status(:forbidden)
       end
     end
 

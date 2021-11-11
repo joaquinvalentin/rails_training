@@ -37,7 +37,14 @@ class Api::V1::UsersController < ApplicationController
   end
 
   rescue_from ActiveRecord::RecordNotFound do
-    render json: { error: 'User not found' }, status: :not_found
+    # TODO: Add error message
+    # If current_user raise this exception for delete or update, it means that the user is not logged in
+    # (and therefore not authorized to access this resource)
+    if request.delete? || request.put?
+      head :forbidden
+    else
+      render json: { error: 'User not found' }, status: :not_found
+    end
   end
 
   private
