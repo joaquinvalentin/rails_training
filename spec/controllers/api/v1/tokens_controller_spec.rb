@@ -17,7 +17,6 @@ RSpec.describe Api::V1::TokensController, type: :controller do
 
       it 'returns a JWT token' do
         create_call({ id: user.id, email: user.email, password: user.password })
-        pp JSON.parse(response.body)
         expect(JSON.parse(response.body)['token']).to eql(JsonWebToken.encode(user_id: user.id))
       end
     end
