@@ -12,7 +12,7 @@ module Authenticable
     @current_user = begin
                       User.find(decoded[:user_id])
     rescue StandardError
-                      ActiveRecord::RecordNotFound
+                      raise ActiveRecord::RecordNotFound
     end
   end
 end
