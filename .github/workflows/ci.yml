@@ -1,0 +1,59 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Ruby CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    environment: testing
+    env:
+      DATABASE_NAME_TESTING: ${{ secrets.DATABASE_NAME_TESTING }}
+      DATABASE_USER_TESTING: ${{ secrets.DATABASE_USER_TESTING }}
+      DATABASE_PASSWORD_TESTING: ${{ secrets.DATABASE_PASSWORD_TESTING }}
+      DATABASE_URL_TESTING: "postgres://${{secrets.DATABASE_USER_TESTING }}:${{secrets.DATABASE_PASSWORD_TESTING}}@localhost/postgres_testing"
+
+      DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+      DATABASE_USER: ${{ secrets.DATABASE_USER }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      DATABASE_URL: "postgres://${{secrets.DATABASE_USER }}:${{secrets.DATABASE_PASSWORD}}@localhost/training_dev"
+    
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: ${{ secrets.DATABASE_NAME_TESTING }}        
+          POSTGRES_PASSWORD: ${{ secrets.DATABASE_PASSWORD_TESTING }}
+          POSTGRES_USER: ${{ secrets.DATABASE_USER_TESTING }}
+        ports:
+          - 5432:5432
+          
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby .ruby-version
+        uses: ruby/setup-ruby@v1
+
+      - name: Install dependencies
+        run: bundle install
+
+      - name: Database setup
+        env:
+          RAILS_ENV: test
+          PGHOST: localhost
+          PGUSER: postgres
+        run: bundle exec rails db:setup --trace RAILS_ENV=test
+
+      - name: Run tests
+        run: bundle exec rspec --format progress
+
+      - name: Run linter
+        run: bundle exec rubocop
