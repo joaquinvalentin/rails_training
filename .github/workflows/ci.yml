@@ -50,7 +50,7 @@ jobs:
           RAILS_ENV: test
           PGHOST: localhost
           PGUSER: postgres
-        run: bundle exec rails db:setup --trace
+        run: bundle exec rails db:setup --trace RAILS_ENV=test
 
       - name: Run tests
         run: bundle exec rspec --format progress
