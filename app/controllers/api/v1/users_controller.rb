@@ -41,7 +41,7 @@ class Api::V1::UsersController < ApplicationController
     # If current_user raise this exception for delete or update, it means that the user is not logged in
     # (and therefore not authorized to access this resource)
     if request.delete? || request.put?
-      head :forbidden
+      head :unauthorized
     else
       render json: { error: 'User not found' }, status: :not_found
     end
@@ -59,6 +59,6 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def check_owner
-    head :forbidden unless user.id == current_user&.id
+    head :unauthorized unless user.id == current_user&.id
   end
 end

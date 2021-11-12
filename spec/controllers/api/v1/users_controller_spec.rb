@@ -113,7 +113,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       before { update_user_call(user_params, {}) }
 
       it 'returns forbidden' do
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -126,7 +126,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       before { update_user_call(user_params, headers) }
 
       it 'returns forbidden' do
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
@@ -160,16 +160,16 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       before { delete_user_call(user.id + 1, headers) }
 
-      it 'returns forbidden' do
-        expect(response).to have_http_status(:forbidden)
+      it 'returns unauthorized' do
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
     context 'when headers are nil' do
       before { delete_user_call(user, {}) }
 
-      it 'returns forbidden' do
-        expect(response).to have_http_status(:forbidden)
+      it 'returns unauthorized' do
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -180,8 +180,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       before { delete_user_call(user, headers) }
 
-      it 'returns forbidden' do
-        expect(response).to have_http_status(:forbidden)
+      it 'returns unauthorized' do
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
