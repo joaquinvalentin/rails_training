@@ -14,7 +14,7 @@ class Api::V1::UsersController < ApplicationController
     if user.save
       render json: UserSerializer.new(user).serializable_hash, status: :created
     else
-      render json: user.errors, status: :unprocessable_entity
+      render_error(4022, user.errors.messages[:error])
     end
   end
 
@@ -23,7 +23,7 @@ class Api::V1::UsersController < ApplicationController
     if user.update(user_params)
       render json: UserSerializer.new(user).serializable_hash, status: :ok
     else
-      render json: user.errors, status: :unprocessable_entity
+      render_error(4022, user.errors.messages[:error])
     end
   end
 
@@ -33,14 +33,14 @@ class Api::V1::UsersController < ApplicationController
     head :no_content
   end
 
-  rescue_from ActiveRecord::RecordNotFound do
+  rescue_from ActiveRecord::RecordNotFound do |exception|
     # TODO: Add error message
     # If current_user raise this exception for delete or update, it means that the user is not logged in
     # (and therefore not authorized to access this resource)
     if request.delete? || request.put?
-      head :unauthorized
+      render_error(4010, exception.message)
     else
-      render json: { error: 'User not found' }, status: :not_found
+      render_error(4000, exception.message)
     end
   end
 
