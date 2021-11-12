@@ -1,0 +1,18 @@
+# frozen_string_literal: true
+
+5000:
+  :http_status: 500
+  :error_code: 5000
+  :description: 'Internal server error'
+4000:
+  :http_status: 404
+  :error_code: 4000
+  :description: 'Not found'
+4001:
+  :http_status: 400
+  :error_code: 4001
+  :description: 'Missing Parameter'
+4010:
+  :http_status: 401
+  :error_code: 4010
+  :description: 'You are not authorized to do this action'
