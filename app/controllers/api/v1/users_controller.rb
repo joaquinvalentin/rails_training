@@ -5,14 +5,14 @@ class Api::V1::UsersController < ApplicationController
 
   # GET /users/1
   def show
-    render json: UserSerializer.new(user).serializable_hash
+    render json: UserSerializer.render(user)
   end
 
   # POST /users
   def create
     user = User.new(user_params)
     if user.save
-      render json: UserSerializer.new(user).serializable_hash, status: :created
+      render json: UserSerializer.render(user), status: :created
     else
       render_error(4022, user.errors.messages[:error])
     end
@@ -21,7 +21,7 @@ class Api::V1::UsersController < ApplicationController
   # PATCH/PUT /users/1
   def update
     if user.update(user_params)
-      render json: UserSerializer.new(user).serializable_hash, status: :ok
+      render json: UserSerializer.render(user), status: :ok
     else
       render_error(4022, user.errors.messages[:error])
     end

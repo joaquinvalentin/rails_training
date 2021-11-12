@@ -72,4 +72,6 @@ gem 'faker', '~> 2.19.0', git: 'https://github.com/faker-ruby/faker.git', branch
 
 gem 'jwt', '~> 2.3'
 
-gem "blueprinter", "~> 0.25.3"
+# For serialization
+
+gem 'blueprinter', '~> 0.25.3'
