@@ -52,4 +52,16 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       end
     end
   end
+
+  describe 'POST #create' do
+    context 'when is successful' do
+      before do
+        post :create, params: { product: { title: 'New Product', price: 10 } }
+      end
+
+      it 'returns the product' do
+        expect(JSON.parse(response.body)['title']).to eql('New Product')
+      end
+    end
+  end
 end
