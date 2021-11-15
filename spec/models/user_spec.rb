@@ -16,7 +16,11 @@ RSpec.describe User, type: :model do
 
   context 'when destroy' do
     it 'destroy linked product' do
-      expect { user.destroy }.to change(Product, :count).by(-1)
+      products = user.products
+      user.destroy
+      products.each do |product|
+        expect(Product.find_by(id: product.id).nil?).to be(true)
+      end
     end
   end
 end
