@@ -31,4 +31,25 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       end
     end
   end
+
+  describe 'GET #index' do
+    context 'when is successful' do
+      let(:products) { user.products }
+
+      before do
+        # If I remove this line, the test will fail
+        user.products
+
+        get :index
+      end
+
+      it 'return successful' do
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns the list of products' do
+        expect(JSON.parse(response.body).first['title']).to eql(products.first.title)
+      end
+    end
+  end
 end

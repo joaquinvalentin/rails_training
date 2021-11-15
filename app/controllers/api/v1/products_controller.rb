@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class Api::V1::ProductsController < ApplicationController
+  def index
+    render json: ProductSerializer.render(Product.all)
+  end
+
   def show
     render json: ProductSerializer.render(Product.find(params[:id]))
   end
