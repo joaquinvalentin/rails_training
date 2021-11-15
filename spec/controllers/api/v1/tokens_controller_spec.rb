@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Api::V1::TokensController, type: :controller do
   let(:user) { create(:user) }
 
-  describe 'POST /create' do
+  describe 'POST #create' do
     def create_call(user_params)
       post :create, params: { user: user_params }
     end
