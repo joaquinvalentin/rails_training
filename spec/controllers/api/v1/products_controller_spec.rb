@@ -55,12 +55,72 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
   describe 'POST #create' do
     context 'when is successful' do
+      let(:headers) do
+        { 'Authorization': JsonWebToken.encode(user_id: user.id) }
+      end
+
       before do
+        request.headers.merge! headers
         post :create, params: { product: { title: 'New Product', price: 10 } }
       end
 
       it 'returns the product' do
         expect(JSON.parse(response.body)['title']).to eql('New Product')
+      end
+    end
+
+    context 'when is not successful' do
+      let(:headers) do
+        { 'Authorization': JsonWebToken.encode(user_id: user.id) }
+      end
+
+      before do
+        request.headers.merge! headers
+        post :create, params: { product: { title: '', price: 10 } }
+      end
+
+      it 'returns the error message' do
+        expect(JSON.parse(response.body)['description']).to eql('Invalid parameter in product')
+      end
+
+      it 'returns unprocessable entity' do
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+  end
+
+  describe 'PUT #update' do
+    context 'when is successful' do
+      let(:headers) do
+        { 'Authorization': JsonWebToken.encode(user_id: user.id) }
+      end
+
+      before do
+        request.headers.merge! headers
+        put :update, params: { id: product.id, product: { title: 'New Product' } }
+      end
+
+      it 'returns the product' do
+        expect(JSON.parse(response.body)['title']).to eql('New Product')
+      end
+    end
+
+    context 'when is not successful' do
+      let(:headers) do
+        { 'Authorization': JsonWebToken.encode(user_id: user.id) }
+      end
+
+      before do
+        request.headers.merge! headers
+        put :update, params: { id: product.id, product: { title: '' } }
+      end
+
+      it 'returns the error message' do
+        expect(JSON.parse(response.body)['description']).to eql('Invalid parameter in product')
+      end
+
+      it 'returns unprocessable entity' do
+        expect(response).to have_http_status(:bad_request)
       end
     end
   end

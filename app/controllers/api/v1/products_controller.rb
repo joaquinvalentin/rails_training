@@ -4,6 +4,7 @@ class Api::V1::ProductsController < ApplicationController
   include Authenticable
 
   before_action :check_login, only: %I[create]
+  before_action :check_owner, only: %I[update]
 
   def index
     render json: ProductSerializer.render(Product.all)
@@ -18,8 +19,16 @@ class Api::V1::ProductsController < ApplicationController
     if product.save
       render json: ProductSerializer.render(product), status: :created
     else
-      render json: { errors: product.errors }, status: :unprocessable_entity
+      render_error(4030, product.errors.messages[:error])
     end
+  end
+
+  def update
+    if product.update(product_params)
+        render json: ProductSerializer.render(product)
+      else
+        render_error(4030, product.errors.messages[:error])
+      end
   end
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
@@ -30,5 +39,13 @@ class Api::V1::ProductsController < ApplicationController
 
   def product_params
     params.require(:product).permit(:title, :price, :published)
+  end
+
+  def check_owner
+    head :unauthorized unless product.user_id == current_user&.id
+  end
+
+  def product
+    @product ||= Product.find(params[:id])
   end
 end
