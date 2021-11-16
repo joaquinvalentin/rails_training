@@ -124,4 +124,40 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    context 'when is successful' do
+      let(:headers) do
+        { 'Authorization': JsonWebToken.encode(user_id: user.id) }
+      end
+
+      before do
+        request.headers.merge! headers
+        delete :destroy, params: { id: product.id }
+      end
+
+      it 'returns no content' do
+        expect(response).to have_http_status(:no_content)
+      end
+    end
+
+    context 'when is not successful' do
+      let(:headers) do
+        { 'Authorization': JsonWebToken.encode(user_id: user.id) }
+      end
+
+      before do
+        request.headers.merge! headers
+        delete :destroy, params: { id: 0 }
+      end
+
+      it 'returns not found' do
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it 'returns the error message' do
+        expect(JSON.parse(response.body)['details']).to eql("Couldn't find Product with 'id'=0")
+      end
+    end
+  end
 end

@@ -4,7 +4,7 @@ class Api::V1::ProductsController < ApplicationController
   include Authenticable
 
   before_action :check_login, only: %I[create]
-  before_action :check_owner, only: %I[update]
+  before_action :check_owner, only: %I[update destroy]
 
   def index
     render json: ProductSerializer.render(Product.all)
@@ -29,6 +29,11 @@ class Api::V1::ProductsController < ApplicationController
       else
         render_error(4030, product.errors.messages[:error])
       end
+  end
+
+  def destroy
+    product.destroy
+    head :no_content
   end
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
