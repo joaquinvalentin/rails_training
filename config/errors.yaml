@@ -28,7 +28,6 @@
   :http_status: 422
   :error_code: 4023
   :description: 'Cannot update profile due to invalid paramater'
-  :description: 'Invalid Parameter'
 4030:
   :http_status: 400
   :error_code: 4030
