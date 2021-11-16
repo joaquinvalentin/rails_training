@@ -37,6 +37,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       it 'returns the error message' do
         expect(JSON.parse(response.body)['details']).to eql("Couldn't find User with 'id'=0")
       end
+
+      it 'returns the error code 4000' do
+        expect(JSON.parse(response.body)['error_code']).to be(4000)
+      end
     end
   end
 
@@ -64,12 +68,16 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       before { create_call(new_user) }
 
-      it 'returns code 422' do
+      it 'returns http code 422' do
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'returns an error' do
         expect(JSON.parse(response.body)['details']).to eql(['is not an email'])
+      end
+
+      it 'returns the error code 4022' do
+        expect(JSON.parse(response.body)['error_code']).to be(4022)
       end
     end
   end
@@ -107,6 +115,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       it 'error status is 422' do
         expect(response).to have_http_status(:unprocessable_entity)
       end
+
+      it 'returns the error code 4023' do
+        expect(JSON.parse(response.body)['error_code']).to be(4023)
+      end
     end
 
     context 'when headers are nil' do
@@ -122,6 +134,14 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         request.headers['Authorization'] = 'Bearer sdklhjflasgd'
         update_user_call(user)
         expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the error code 4010' do
+        expect(JSON.parse(response.body)['error_code']).to be(4010)
+      end
+
+      it 'returns the error message' do
+        expect(JSON.parse(response.body)['description']).to eql('User can not be deleted or updated due to user not found')
       end
     end
   end
@@ -149,6 +169,14 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         delete_user_call(user)
         expect(response).to have_http_status(:unauthorized)
       end
+
+      it 'returns the error code 4010' do
+        expect(JSON.parse(response.body)['error_code']).to be(4010)
+      end
+
+      it 'returns the error message' do
+        expect(JSON.parse(response.body)['description']).to eql('User can not be deleted or updated due to user not found')
+      end
     end
 
     context 'when headers are nil' do
@@ -164,6 +192,14 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         request.headers['Authorization'] = 'Bearer sdklhjflasgd'
         delete_user_call(user)
         expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the error code 4010' do
+        expect(JSON.parse(response.body)['error_code']).to be(4010)
+      end
+
+      it 'returns the error message' do
+        expect(JSON.parse(response.body)['description']).to eql('User can not be deleted or updated due to user not found')
       end
     end
   end

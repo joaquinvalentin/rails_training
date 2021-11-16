@@ -23,7 +23,7 @@ class Api::V1::UsersController < ApplicationController
     if user.update(user_params)
       render json: UserSerializer.render(user), status: :ok
     else
-      render_error(4022, user.errors.messages[:error])
+      render_error(4023, user.errors.messages[:error])
     end
   end
 

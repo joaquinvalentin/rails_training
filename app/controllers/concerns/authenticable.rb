@@ -8,8 +8,8 @@ module Authenticable
     return nil if header.nil?
 
     @current_user = begin
-                      decoded = JsonWebToken.decode(header)
-                      User.find(decoded[:user_id])
+                        decoded = JsonWebToken.decode(header.split(' ').last)
+                        User.find(decoded[:user_id])
     rescue StandardError
         raise AuthenticationError
     end
