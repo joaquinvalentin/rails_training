@@ -19,7 +19,7 @@ class Api::V1::ProductsController < ApplicationController
     if product.save
       render json: ProductSerializer.render(product), status: :created
     else
-      render_error(4030, product.errors.messages[:error])
+      render_error(4040, product.errors.messages[:error])
     end
   end
 
@@ -27,7 +27,7 @@ class Api::V1::ProductsController < ApplicationController
     if product.update(product_params)
         render json: ProductSerializer.render(product)
       else
-        render_error(4030, product.errors.messages[:error])
+        render_error(4040, product.errors.messages[:error])
       end
   end
 

@@ -29,6 +29,10 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       it 'returns the error message' do
         expect(JSON.parse(response.body)['details']).to eql("Couldn't find Product with 'id'=0")
       end
+
+      it 'returns the error code 4000' do
+        expect(JSON.parse(response.body)['error_code']).to be(4000)
+      end
     end
   end
 
@@ -86,6 +90,10 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       it 'returns unprocessable entity' do
         expect(response).to have_http_status(:bad_request)
       end
+
+      it 'returns the error code 4040' do
+        expect(JSON.parse(response.body)['error_code']).to be(4040)
+      end
     end
   end
 
@@ -119,8 +127,12 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(JSON.parse(response.body)['description']).to eql('Invalid parameter in product')
       end
 
-      it 'returns unprocessable entity' do
+      it 'returns bad request' do
         expect(response).to have_http_status(:bad_request)
+      end
+
+      it 'returns the error code 4040' do
+        expect(JSON.parse(response.body)['error_code']).to be(4040)
       end
     end
   end
@@ -157,6 +169,10 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
       it 'returns the error message' do
         expect(JSON.parse(response.body)['details']).to eql("Couldn't find Product with 'id'=0")
+      end
+
+      it 'returns the error code 4000' do
+        expect(JSON.parse(response.body)['error_code']).to be(4000)
       end
     end
   end
