@@ -76,7 +76,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when is successful' do
       let(:user_params) { { email: 'email@dominio.com', password: '123456' } }
       let(:headers) do
-        { 'Authorization': JsonWebToken.encode(user_id: user.id) }
+        { 'Authorization': authenticate_user(user.id) }
       end
 
       before { update_user_call(user_params, headers) }
@@ -93,7 +93,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when params are invalid' do
       let(:user_params) { { email: 'bad_email', password: '123456' } }
       let(:headers) do
-        { 'Authorization': JsonWebToken.encode(user_id: user.id) }
+        { 'Authorization': authenticate_user(user.id) }
       end
 
       before { update_user_call(user_params, headers) }
@@ -120,7 +120,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when token is invalid' do
       let(:user_params) { { email: 'email@dominio.com', password: '123456' } }
       let(:headers) do
-        { 'Authorization': JsonWebToken.encode(user_id: user.id + 1) }
+        { 'Authorization': authenticate_user(user.id + 1) }
       end
 
       before { update_user_call(user_params, headers) }
@@ -139,7 +139,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when is successful' do
       let(:headers) do
-        { 'Authorization': JsonWebToken.encode(user_id: user.id) }
+        { 'Authorization': authenticate_user(user.id) }
       end
 
       before { delete_user_call(user, headers) }
@@ -155,7 +155,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when the user is other' do
       let(:headers) do
-        { 'Authorization': JsonWebToken.encode(user_id: user.id) }
+        { 'Authorization': authenticate_user(user.id) }
       end
 
       before { delete_user_call(user.id + 1, headers) }
@@ -175,7 +175,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when token is invalid' do
       let(:headers) do
-        { 'Authorization': JsonWebToken.encode(user_id: user.id + 1) }
+        { 'Authorization': authenticate_user(user.id + 1) }
       end
 
       before { delete_user_call(user, headers) }
