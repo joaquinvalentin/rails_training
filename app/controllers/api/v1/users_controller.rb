@@ -60,6 +60,6 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def check_owner
-    head :unauthorized unless user.id == current_user&.id
+    render_error(4011) unless user.id == current_user&.id
   end
 end
