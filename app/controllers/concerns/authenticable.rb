@@ -17,4 +17,10 @@ module Authenticable
 
   class AuthenticationError < StandardError
   end
+
+  protected
+
+  def check_login
+    head :forbidden unless current_user
+  end
 end

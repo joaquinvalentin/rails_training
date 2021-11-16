@@ -151,14 +151,6 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         error_message = 'User can not be deleted or updated due to unauthorized'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
-
-      it 'returns the error code 4010' do
-        expect(JSON.parse(response.body)['error_code']).to be(4010)
-      end
-
-      it 'returns the error message' do
-        expect(JSON.parse(response.body)['description']).to eql('User can not be deleted or updated due to user not found')
-      end
     end
   end
 
@@ -198,14 +190,6 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         error_message = 'User can not be deleted or updated due to unauthorized'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
-
-      it 'returns the error code 4010' do
-        expect(JSON.parse(response.body)['error_code']).to be(4010)
-      end
-
-      it 'returns the error message' do
-        expect(JSON.parse(response.body)['description']).to eql('User can not be deleted or updated due to user not found')
-      end
     end
 
     context 'when headers are nil' do
@@ -240,14 +224,6 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         delete_user_call(user)
         error_message = 'User can not be deleted or updated due to unauthorized'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
-      end
-
-      it 'returns the error code 4010' do
-        expect(JSON.parse(response.body)['error_code']).to be(4010)
-      end
-
-      it 'returns the error message' do
-        expect(JSON.parse(response.body)['description']).to eql('User can not be deleted or updated due to user not found')
       end
     end
   end
