@@ -14,12 +14,15 @@ user_ids = []
     email: Faker::Internet.email, password: Faker::Internet.password
   )
   user_ids << user.id
+  puts "Created a new user: #{user.email}"
 end
 
 5.times do
-  Product.create!(
+  product = Product.create!(
     title: Faker::Commerce.product_name,
     price: Faker::Commerce.price,
-    user_id: user_ids.sample
+    user_id: user_ids.sample,
+    published: true
   )
+  puts "Created a brand new product: #{product.title}"
 end
