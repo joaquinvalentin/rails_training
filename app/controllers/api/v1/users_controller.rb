@@ -1,6 +1,4 @@
 class Api::V1::UsersController < ApplicationController
-  include Authenticable
-
   before_action :check_owner, only: %i[update destroy]
 
   # GET /users/1
