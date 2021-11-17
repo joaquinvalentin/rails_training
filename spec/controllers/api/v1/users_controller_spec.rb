@@ -4,7 +4,9 @@ require 'rails_helper'
 require 'json'
 
 RSpec.describe Api::V1::UsersController, type: :controller do
-  let(:user) { create(:user) }
+  def user
+    @user ||= create(:user)
+  end
 
   describe 'GET #show' do
     context 'when is successful' do
@@ -68,18 +70,21 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'PUT #update' do
-    def update_user_call(user_params, headers)
+    def user_params
+      @user_params = { email: 'email@dominio.com', password: '123456' }
+    end
+
+    def update_user_call(headers)
       request.headers.merge! headers
       put :update, params: { id: user.id, user: user_params }
     end
 
     context 'when is successful' do
-      let(:user_params) { { email: 'email@dominio.com', password: '123456' } }
       let(:headers) do
         { 'Authorization': authenticate_user(user.id) }
       end
 
-      before { update_user_call(user_params, headers) }
+      before { update_user_call(headers) }
 
       it 'returns successful' do
         expect(response).to have_http_status(:success)
@@ -96,7 +101,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         { 'Authorization': authenticate_user(user.id) }
       end
 
-      before { update_user_call(user_params, headers) }
+      before { update_user_call(headers) }
 
       it 'returns a error' do
         expect(JSON.parse(response.body)['error']).to eql(['is not an email'])
@@ -108,22 +113,19 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
 
     context 'when headers are nil' do
-      let(:user_params) { { email: 'email@dominio.com', password: '123456' } }
-
       it 'returns forbidden' do
-        update_user_call(user_params, {})
+        update_user_call({})
         expect(response).to have_http_status(:unauthorized)
       end
     end
 
     context 'when token is invalid' do
-      let(:user_params) { { email: 'email@dominio.com', password: '123456' } }
       let(:headers) do
         { 'Authorization': authenticate_user(user.id + 1) }
       end
 
       it 'returns forbidden' do
-        update_user_call(user_params, headers)
+        update_user_call(headers)
         expect(response).to have_http_status(:unauthorized)
       end
     end

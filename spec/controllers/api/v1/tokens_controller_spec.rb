@@ -3,12 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::TokensController, type: :controller do
-  let(:user) { create(:user) }
+  def user
+    @user ||= create(:user)
+  end
 
   describe 'POST #create' do
     def create_call(user_params)
       post :create, params: { user: user_params }
     end
+
     context 'when it is successful' do
       it 'returns http success' do
         create_call({ id: user.id, email: user.email, password: user.password })
