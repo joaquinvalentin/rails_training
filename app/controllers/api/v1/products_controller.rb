@@ -11,7 +11,7 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def show
-    render json: ProductSerializer.render(Product.find(params[:id]))
+    render json: ProductSerializer.render(product)
   end
 
   def create

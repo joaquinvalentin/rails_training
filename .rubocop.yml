@@ -53,6 +53,7 @@ RSpec/PredicateMatcher:
   EnforcedStyle: explicit
   AllowedExplicitMatchers:
     - have_http_status
+    - be_nil
 RSpec/MessageSpies:
   EnforcedStyle: receive
 

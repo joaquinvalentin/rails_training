@@ -25,7 +25,7 @@ RSpec.describe User, type: :model do
       products = user_with_products.products
       user_with_products.destroy
       products.each do |product|
-        expect(Product.find_by(id: product.id).nil?).to be(true)
+        expect(Product.find_by(id: product.id)).to be_nil
       end
     end
   end
