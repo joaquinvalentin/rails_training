@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::UsersController < ApplicationController
   before_action :check_owner, only: %i[update destroy]
 

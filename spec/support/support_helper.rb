@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 module AuthenticationHelper
-  def authenticate_user(id)
-    payload = { user_id: id }
+  def create_authenticated_user
+    user = User.first || FactoryBot.create(:user)
+    payload = { user_id: user.id }
     jwt = JsonWebToken.encode(payload)
-    "Bearer #{jwt}"
+    @request.headers['Authorization'] = "Bearer #{jwt}"
+    user
   end
 end

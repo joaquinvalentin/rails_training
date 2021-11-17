@@ -8,6 +8,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     @user ||= create(:user)
   end
 
+  def authenticated_user
+    @authenticated_user ||= create_authenticated_user
+  end
+
   describe 'GET #show' do
     context 'when is successful' do
       before { get :show, params: { id: user.id } }
@@ -74,17 +78,12 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       @user_params = { email: 'email@dominio.com', password: '123456' }
     end
 
-    def update_user_call(headers)
-      request.headers.merge! headers
+    def update_user_call(user)
       put :update, params: { id: user.id, user: user_params }
     end
 
     context 'when is successful' do
-      let(:headers) do
-        { 'Authorization': authenticate_user(user.id) }
-      end
-
-      before { update_user_call(headers) }
+      before { update_user_call(authenticated_user) }
 
       it 'returns successful' do
         expect(response).to have_http_status(:success)
@@ -97,11 +96,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when params are invalid' do
       let(:user_params) { { email: 'bad_email', password: '123456' } }
-      let(:headers) do
-        { 'Authorization': authenticate_user(user.id) }
-      end
 
-      before { update_user_call(headers) }
+      before { update_user_call(authenticated_user) }
 
       it 'returns a error' do
         expect(JSON.parse(response.body)['error']).to eql(['is not an email'])
@@ -114,70 +110,58 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when headers are nil' do
       it 'returns forbidden' do
-        update_user_call({})
+        request.headers['Authorization'] = nil
+        update_user_call(user)
         expect(response).to have_http_status(:unauthorized)
       end
     end
 
     context 'when token is invalid' do
-      let(:headers) do
-        { 'Authorization': authenticate_user(user.id + 1) }
-      end
-
       it 'returns forbidden' do
-        update_user_call(headers)
+        request.headers['Authorization'] = 'Bearer sdklhjflasgd'
+        update_user_call(user)
         expect(response).to have_http_status(:unauthorized)
       end
     end
   end
 
   describe 'DELETE #destroy' do
-    def delete_user_call(user_to_destroy, headers)
-      request.headers.merge! headers
-      delete :destroy, params: { id: user_to_destroy }
+    def delete_user_call(user_to_destroy)
+      delete :destroy, params: { id: user_to_destroy.id }
     end
 
     context 'when is successful' do
-      let(:headers) do
-        { 'Authorization': authenticate_user(user.id) }
-      end
-
-      before { delete_user_call(user, headers) }
+      before { delete_user_call(authenticated_user) }
 
       it 'returns no content' do
         expect(response).to have_http_status(:no_content)
       end
 
       it 'destroy the user' do
-        expect(User.find_by(id: user.id).nil?).to be(true)
+        expect(User.find_by(id: authenticated_user.id).nil?).to be(true)
       end
     end
 
     context 'when the user is other' do
-      let(:headers) do
-        { 'Authorization': authenticate_user(user.id) }
-      end
-
       it 'returns unauthorized' do
-        delete_user_call(user.id + 1, headers)
+        authenticated_user
+        delete_user_call(user)
         expect(response).to have_http_status(:unauthorized)
       end
     end
 
     context 'when headers are nil' do
       it 'returns unauthorized' do
-        delete_user_call(user, {})
+        request.headers['Authorization'] = nil
+        delete_user_call(user)
         expect(response).to have_http_status(:unauthorized)
       end
     end
 
     context 'when token is invalid' do
-      let(:headers) do
-        { 'Authorization': authenticate_user(user.id + 1) }
-      end
-
       it 'returns unauthorized' do
-        delete_user_call(user, headers)
+        request.headers['Authorization'] = 'Bearer sdklhjflasgd'
+        delete_user_call(user)
         expect(response).to have_http_status(:unauthorized)
       end
     end
