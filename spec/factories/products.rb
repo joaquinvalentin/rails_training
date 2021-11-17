@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :product do
-    title { 'MyString' }
-    price { '9.99' }
-    published { false }
+    title { Faker::Commerce.product_name }
+    price { Faker::Commerce.price }
+    published { true }
   end
 end
