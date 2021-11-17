@@ -110,9 +110,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when headers are nil' do
       let(:user_params) { { email: 'email@dominio.com', password: '123456' } }
 
-      before { update_user_call(user_params, {}) }
-
       it 'returns forbidden' do
+        update_user_call(user_params, {})
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -123,9 +122,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         { 'Authorization': authenticate_user(user.id + 1) }
       end
 
-      before { update_user_call(user_params, headers) }
-
       it 'returns forbidden' do
+        update_user_call(user_params, headers)
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -158,17 +156,15 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         { 'Authorization': authenticate_user(user.id) }
       end
 
-      before { delete_user_call(user.id + 1, headers) }
-
       it 'returns unauthorized' do
+        delete_user_call(user.id + 1, headers)
         expect(response).to have_http_status(:unauthorized)
       end
     end
 
     context 'when headers are nil' do
-      before { delete_user_call(user, {}) }
-
       it 'returns unauthorized' do
+        delete_user_call(user, {})
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -178,9 +174,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         { 'Authorization': authenticate_user(user.id + 1) }
       end
 
-      before { delete_user_call(user, headers) }
-
       it 'returns unauthorized' do
+        delete_user_call(user, headers)
         expect(response).to have_http_status(:unauthorized)
       end
     end
