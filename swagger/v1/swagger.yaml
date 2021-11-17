@@ -1,0 +1,33 @@
+---
+openapi: 3.0.1
+info:
+  title: API documentation for users
+  version: v1
+paths:
+  "/api/v1/users/{id}":
+    get:
+      summary: Retrieve a user
+      tags:
+      - Users
+      description: Get the user information.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User found
+          examples:
+            application/json:
+              data:
+                id: '17'
+                type: user
+                attributes:
+                  email: noel@rempel.com
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com

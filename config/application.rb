@@ -54,5 +54,10 @@ module Training
 
     # Autoload lib folder
     config.eager_load_paths << Rails.root.join('lib')
+    if Rails.env.test?
+      RSpec.configure do |config|
+        config.swagger_dry_run = false
+      end
+    end
   end
 end
