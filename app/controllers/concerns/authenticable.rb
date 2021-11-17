@@ -11,7 +11,7 @@ module Authenticable
 
     @current_user = begin
                       User.find(decoded[:user_id])
-    rescue Failure
+    rescue StandardError
         raise AuthenticationError
     end
   end
