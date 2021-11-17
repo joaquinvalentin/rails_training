@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Api::V1::UsersController < ApplicationController
+  before_action :check_owner, only: %i[update destroy]
+
   # GET /users/1
   def show
     render json: UserSerializer.new(user).serializable_hash
@@ -32,7 +34,18 @@ class Api::V1::UsersController < ApplicationController
   end
 
   rescue_from ActiveRecord::RecordNotFound do
-    render json: { error: 'User not found' }, status: :not_found
+    # TODO: Add error message
+    # If current_user raise this exception for delete or update, it means that the user is not logged in
+    # (and therefore not authorized to access this resource)
+    if request.delete? || request.put?
+      head :unauthorized
+    else
+      render json: { error: 'User not found' }, status: :not_found
+    end
+  end
+
+  rescue_from AuthenticationError do
+    render json: { error: 'Authentication error' }, status: :unauthorized
   end
 
   private
@@ -44,5 +57,9 @@ class Api::V1::UsersController < ApplicationController
 
   def user
     @user ||= User.find(params[:id])
+  end
+
+  def check_owner
+    head :unauthorized unless user.id == current_user&.id
   end
 end

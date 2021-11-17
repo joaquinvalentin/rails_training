@@ -51,5 +51,8 @@ module Training
     config.database_user = ENV.fetch('DATABASE_USER')
     config.database_password = ENV.fetch('DATABASE_PASSWORD')
     config.database_url = ENV.fetch('DATABASE_URL')
+
+    # Autoload lib folder
+    config.eager_load_paths << Rails.root.join('lib')
   end
 end
