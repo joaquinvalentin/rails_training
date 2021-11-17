@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::ProductsController, type: :controller do
-  let(:user) { create(:user_with_products) }
+  let(:user) { create(:user, :with_products) }
   let(:product) { user.products.first }
 
   describe 'GET #show' do
