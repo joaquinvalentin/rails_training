@@ -11,8 +11,11 @@ module Authenticable
 
     @current_user = begin
                       User.find(decoded[:user_id])
-    rescue StandardError
-                      raise ActiveRecord::RecordNotFound
+    rescue Failure
+        raise AuthenticationError
     end
+  end
+
+  class AuthenticationError < StandardError
   end
 end

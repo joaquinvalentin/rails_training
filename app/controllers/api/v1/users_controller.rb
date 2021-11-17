@@ -42,6 +42,10 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  rescue_from AuthenticationError do
+    render json: { error: 'Authentication error' }, status: :unauthorized
+  end
+
   private
 
   # Only allow a trusted parameter "white list" through.
