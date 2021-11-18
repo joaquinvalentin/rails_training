@@ -56,6 +56,9 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       it 'returns the list of products' do
         title = user.products.first.title
         do_request
+        pp User.count
+        pp Product.count
+        pp Product.all
         expect(JSON.parse(response.body).first['title']).to eql(title)
       end
     end
