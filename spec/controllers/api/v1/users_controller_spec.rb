@@ -13,14 +13,18 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'GET #show' do
-    context 'when is successful' do
-      before { get :show, params: { id: user.id } }
+    def do_request(id)
+      get :show, params: { id: id }
+    end
 
+    context 'when is successful' do
       it 'return successful' do
+        do_request(user.id)
         expect(response).to have_http_status(:success)
       end
 
       it 'returns the user' do
+        do_request(user.id)
         # Test to ensure response contains the correct email
 
         expect(JSON.parse(response.body)['email']).to eql(user.email)
@@ -28,17 +32,18 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
 
     context 'when is not successful' do
-      before { get :show, params: { id: 0 } }
-
       it 'returns not found' do
+        do_request(0)
         expect(response).to have_http_status(:not_found)
       end
 
       it 'returns the error message' do
+        do_request(0)
         expect(JSON.parse(response.body)['details']).to eql("Couldn't find User with 'id'=0")
       end
 
       it 'returns the error code 4000' do
+        do_request(0)
         expect(JSON.parse(response.body)['error_code']).to be(4000)
       end
     end
@@ -52,13 +57,13 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when is successful' do
       let(:new_user) { { email: 'test@test.org', password: '123456' } }
 
-      before { create_call(new_user) }
-
       it 'returns successful' do
+        create_call(new_user)
         expect(response).to have_http_status(:created)
       end
 
       it 'returns the user' do
+        create_call(new_user)
         expect(JSON.parse(response.body)['email']).to eql(new_user[:email])
       end
     end
@@ -66,18 +71,19 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when is not successful' do
       let(:new_user) { { email: 'test.org', password: '123456' } }
 
-      before { create_call(new_user) }
+      it 'returns the error code 4022' do
+        create_call(new_user)
+        expect(JSON.parse(response.body)['error_code']).to be(4022)
+      end
 
-      it 'returns http code 422' do
+      it 'returns code 422' do
+        create_call(new_user)
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
-      it 'returns an error' do
+      it 'returns a error' do
+        create_call(new_user)
         expect(JSON.parse(response.body)['details']).to eql(['is not an email'])
-      end
-
-      it 'returns the error code 4022' do
-        expect(JSON.parse(response.body)['error_code']).to be(4022)
       end
     end
   end
@@ -92,13 +98,13 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
 
     context 'when is successful' do
-      before { update_user_call(authenticated_user) }
-
       it 'returns successful' do
+        update_user_call(authenticated_user)
         expect(response).to have_http_status(:success)
       end
 
       it 'returns the user' do
+        update_user_call(authenticated_user)
         expect(JSON.parse(response.body)['email']).to eql('email@dominio.com')
       end
     end
@@ -109,17 +115,18 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         { 'Authorization': JsonWebToken.encode(user_id: user.id) }
       end
 
-      before { update_user_call(authenticated_user) }
-
-      it 'returns an error' do
+      it 'returns a error' do
+        update_user_call(authenticated_user)
         expect(JSON.parse(response.body)['details']).to eql(['is not an email'])
       end
 
       it 'error status is 422' do
+        update_user_call(authenticated_user)
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'returns the error code 4023' do
+        update_user_call(authenticated_user)
         expect(JSON.parse(response.body)['error_code']).to be(4023)
       end
     end
@@ -160,20 +167,19 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
 
     context 'when is successful' do
-      before { delete_user_call(authenticated_user) }
-
       it 'returns no content' do
+        delete_user_call(authenticated_user)
         expect(response).to have_http_status(:no_content)
       end
 
       it 'destroy the user' do
+        delete_user_call(authenticated_user)
         expect(User.find_by(id: authenticated_user.id).nil?).to be(true)
       end
     end
 
     context 'when the user is other' do
       it 'returns unauthorized' do
-        authenticated_user
         delete_user_call(user)
         expect(response).to have_http_status(:unauthorized)
       end
