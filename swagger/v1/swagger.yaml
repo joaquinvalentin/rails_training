@@ -21,17 +21,17 @@ paths:
           description: User found
           examples:
             application/json:
-              data:
-                id: '1416'
-                type: user
-                attributes:
-                  email: willis_hyatt@emard.info
+              email: tyrone@wisoky-hills.io
     put:
       summary: Update a user
       tags:
       - Users
       description: Update a user.
       parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
       - name: id
         in: path
         required: true
@@ -42,11 +42,7 @@ paths:
           description: User updated
           examples:
             application/json:
-              data:
-                id: '1418'
-                type: user
-                attributes:
-                  email: ray_buckridge@schmeler.net
+              email: erika_schuppe@beahan-beer.com
       requestBody:
         content:
           application/json:
@@ -77,11 +73,7 @@ paths:
           description: User created
           examples:
             application/json:
-              data:
-                id: '1417'
-                type: user
-                attributes:
-                  email: jae@oreilly.org
+              email: cleopatra@gorczany.io
       requestBody:
         content:
           application/json:
@@ -105,3 +97,9 @@ servers:
   variables:
     defaultHost:
       default: localhost:3000/
+components:
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
