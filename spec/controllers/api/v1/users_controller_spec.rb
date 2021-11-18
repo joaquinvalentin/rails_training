@@ -130,22 +130,22 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
 
     context 'when token is invalid' do
-      it 'returns forbidden' do
+      it 'returns unauthorized' do
         request.headers['Authorization'] = 'Bearer sdklhjflasgd'
         update_user_call(user)
         expect(response).to have_http_status(:unauthorized)
       end
 
-      it 'returns the error code 4010' do
+      it 'returns the error code 4011' do
         request.headers['Authorization'] = 'Bearer sdklhjflasgd'
         update_user_call(user)
-        expect(JSON.parse(response.body)['error_code']).to be(4010)
+        expect(JSON.parse(response.body)['error_code']).to be(4011)
       end
 
       it 'returns the error message' do
         request.headers['Authorization'] = 'Bearer sdklhjflasgd'
         update_user_call(user)
-        error_message = 'User can not be deleted or updated due to user not found'
+        error_message = 'User can not be deleted or updated due to unauthorized'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
     end
@@ -197,6 +197,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       it 'returns the error code 4011' do
+        request.headers['Authorization'] = nil
+        delete_user_call(user)
         expect(JSON.parse(response.body)['error_code']).to be(4011)
       end
     end
@@ -211,13 +213,13 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       it 'returns the error code 4010' do
         request.headers['Authorization'] = 'Bearer sdklhjflasgd'
         delete_user_call(user)
-        expect(JSON.parse(response.body)['error_code']).to be(4010)
+        expect(JSON.parse(response.body)['error_code']).to be(4011)
       end
 
       it 'returns the error message' do
         request.headers['Authorization'] = 'Bearer sdklhjflasgd'
         delete_user_call(user)
-        error_message = 'User can not be deleted or updated due to user not found'
+        error_message = 'User can not be deleted or updated due to unauthorized'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
     end

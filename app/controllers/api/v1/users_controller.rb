@@ -45,7 +45,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   rescue_from AuthenticationError do
-    render json: { error: 'Authentication error' }, status: :unauthorized
+    render_error(4011)
   end
 
   private
