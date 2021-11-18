@@ -3,8 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::ProductsController, type: :controller do
-  let(:user) { create(:user, :with_products) }
-  let(:product) { user.products.first }
+  def user
+    @user ||= create(:user, :with_products)
+  end
+
+  def product
+    @product ||= user.products.first
+  end
 
   describe 'GET #show' do
     context 'when is successful' do
@@ -30,8 +35,8 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(JSON.parse(response.body)['details']).to eql("Couldn't find Product with 'id'=0")
       end
 
-      it 'returns the error code 4000' do
-        expect(JSON.parse(response.body)['error_code']).to be(4000)
+      it 'returns the error code 4104' do
+        expect(JSON.parse(response.body)['error_code']).to be(4104)
       end
     end
   end
@@ -91,8 +96,8 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(response).to have_http_status(:bad_request)
       end
 
-      it 'returns the error code 4040' do
-        expect(JSON.parse(response.body)['error_code']).to be(4040)
+      it 'returns the error code 4130' do
+        expect(JSON.parse(response.body)['error_code']).to be(4130)
       end
     end
   end
@@ -131,8 +136,8 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(response).to have_http_status(:bad_request)
       end
 
-      it 'returns the error code 4040' do
-        expect(JSON.parse(response.body)['error_code']).to be(4040)
+      it 'returns the error code 4130' do
+        expect(JSON.parse(response.body)['error_code']).to be(4130)
       end
     end
   end
@@ -171,8 +176,8 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(JSON.parse(response.body)['details']).to eql("Couldn't find Product with 'id'=0")
       end
 
-      it 'returns the error code 4000' do
-        expect(JSON.parse(response.body)['error_code']).to be(4000)
+      it 'returns the error code 4104' do
+        expect(JSON.parse(response.body)['error_code']).to be(4104)
       end
     end
   end

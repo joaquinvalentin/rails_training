@@ -21,6 +21,6 @@ module Authenticable
   protected
 
   def check_login
-    head :forbidden unless current_user
+    render_error(4111) unless current_user
   end
 end

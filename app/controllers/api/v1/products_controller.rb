@@ -19,7 +19,7 @@ class Api::V1::ProductsController < ApplicationController
     if product.save
       render json: ProductSerializer.render(product), status: :created
     else
-      render_error(4040, product.errors.messages[:error])
+      render_error(4130, product.errors.messages[:error])
     end
   end
 
@@ -27,7 +27,7 @@ class Api::V1::ProductsController < ApplicationController
     if product.update(product_params)
         render json: ProductSerializer.render(product)
       else
-        render_error(4040, product.errors.messages[:error])
+        render_error(4130, product.errors.messages[:error])
       end
   end
 
@@ -37,7 +37,7 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
-    render_error(4000, exception.message)
+    render_error(4104, exception.message)
   end
 
   private
@@ -47,7 +47,7 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def check_owner
-    head :unauthorized unless product.user_id == current_user&.id
+    render_error(4111) unless product.user_id == current_user&.id
   end
 
   def product
