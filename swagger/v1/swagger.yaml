@@ -22,12 +22,86 @@ paths:
           examples:
             application/json:
               data:
-                id: '17'
+                id: '1416'
                 type: user
                 attributes:
-                  email: noel@rempel.com
+                  email: willis_hyatt@emard.info
+    put:
+      summary: Update a user
+      tags:
+      - Users
+      description: Update a user.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User updated
+          examples:
+            application/json:
+              data:
+                id: '1418'
+                type: user
+                attributes:
+                  email: ray_buckridge@schmeler.net
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - email
+                  - password
+                required:
+                - user
+  "/api/v1/users":
+    post:
+      summary: Create a user
+      tags:
+      - Users
+      description: Create a user.
+      parameters: []
+      responses:
+        '201':
+          description: User created
+          examples:
+            application/json:
+              data:
+                id: '1417'
+                type: user
+                attributes:
+                  email: jae@oreilly.org
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - email
+                  - password
+                required:
+                - user
 servers:
-- url: https://{defaultHost}
+- url: http://{defaultHost}
   variables:
     defaultHost:
-      default: www.example.com
+      default: localhost:3000/
