@@ -25,7 +25,7 @@ RSpec.describe Api::V1::TokensController, type: :controller do
     end
 
     context 'when it is unsuccessful' do
-      it 'returns http unprocessable entity' do
+      it 'returns http unauthorized' do
         create_call({ id: user.id, email: user.email, password: 'wrong_password' })
         expect(response).to have_http_status(:unauthorized)
       end

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-class UserSerializer
-  include JSONAPI::Serializer
-  attributes :email
+class UserSerializer < Blueprinter::Base
+  field :email
 end

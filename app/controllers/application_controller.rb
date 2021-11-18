@@ -2,4 +2,5 @@
 
 class ApplicationController < ActionController::API
   include Authenticable
+  include ErrorHandler
 end

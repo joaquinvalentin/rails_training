@@ -22,7 +22,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       it 'returns the user' do
         # Test to ensure response contains the correct email
-        expect(JSON.parse(response.body)['data']['attributes']['email']).to eql(user.email)
+
+        expect(JSON.parse(response.body)['email']).to eql(user.email)
       end
     end
 
@@ -34,7 +35,11 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       it 'returns the error message' do
-        expect(JSON.parse(response.body)['error']).to eql('User not found')
+        expect(JSON.parse(response.body)['details']).to eql("Couldn't find User with 'id'=0")
+      end
+
+      it 'returns the error code 4000' do
+        expect(JSON.parse(response.body)['error_code']).to be(4000)
       end
     end
   end
@@ -54,7 +59,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       it 'returns the user' do
-        expect(JSON.parse(response.body)['data']['attributes']['email']).to eql(new_user[:email])
+        expect(JSON.parse(response.body)['email']).to eql(new_user[:email])
       end
     end
 
@@ -63,12 +68,16 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       before { create_call(new_user) }
 
-      it 'returns code 422' do
+      it 'returns http code 422' do
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
-      it 'returns a error' do
-        expect(JSON.parse(response.body)['error']).to eql(['is not an email'])
+      it 'returns an error' do
+        expect(JSON.parse(response.body)['details']).to eql(['is not an email'])
+      end
+
+      it 'returns the error code 4022' do
+        expect(JSON.parse(response.body)['error_code']).to be(4022)
       end
     end
   end
@@ -90,7 +99,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       it 'returns the user' do
-        expect(JSON.parse(response.body)['data']['attributes']['email']).to eql('email@dominio.com')
+        expect(JSON.parse(response.body)['email']).to eql('email@dominio.com')
       end
     end
 
@@ -99,12 +108,16 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       before { update_user_call(authenticated_user) }
 
-      it 'returns a error' do
-        expect(JSON.parse(response.body)['error']).to eql(['is not an email'])
+      it 'returns an error' do
+        expect(JSON.parse(response.body)['details']).to eql(['is not an email'])
       end
 
       it 'error status is 422' do
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it 'returns the error code 4023' do
+        expect(JSON.parse(response.body)['error_code']).to be(4023)
       end
     end
 
@@ -117,10 +130,23 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
 
     context 'when token is invalid' do
-      it 'returns forbidden' do
+      it 'returns unauthorized' do
         request.headers['Authorization'] = 'Bearer sdklhjflasgd'
         update_user_call(user)
         expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the error code 4011' do
+        request.headers['Authorization'] = 'Bearer sdklhjflasgd'
+        update_user_call(user)
+        expect(JSON.parse(response.body)['error_code']).to be(4011)
+      end
+
+      it 'returns the error message' do
+        request.headers['Authorization'] = 'Bearer sdklhjflasgd'
+        update_user_call(user)
+        error_message = 'User can not be deleted or updated due to unauthorized'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
     end
   end
@@ -148,6 +174,19 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         delete_user_call(user)
         expect(response).to have_http_status(:unauthorized)
       end
+
+      it 'returns the error code 4011' do
+        authenticated_user
+        delete_user_call(user)
+        expect(JSON.parse(response.body)['error_code']).to be(4011)
+      end
+
+      it 'returns the error message' do
+        authenticated_user
+        delete_user_call(user)
+        error_message = 'User can not be deleted or updated due to unauthorized'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
     end
 
     context 'when headers are nil' do
@@ -156,6 +195,12 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         delete_user_call(user)
         expect(response).to have_http_status(:unauthorized)
       end
+
+      it 'returns the error code 4011' do
+        request.headers['Authorization'] = nil
+        delete_user_call(user)
+        expect(JSON.parse(response.body)['error_code']).to be(4011)
+      end
     end
 
     context 'when token is invalid' do
@@ -163,6 +208,19 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         request.headers['Authorization'] = 'Bearer sdklhjflasgd'
         delete_user_call(user)
         expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the error code 4010' do
+        request.headers['Authorization'] = 'Bearer sdklhjflasgd'
+        delete_user_call(user)
+        expect(JSON.parse(response.body)['error_code']).to be(4011)
+      end
+
+      it 'returns the error message' do
+        request.headers['Authorization'] = 'Bearer sdklhjflasgd'
+        delete_user_call(user)
+        error_message = 'User can not be deleted or updated due to unauthorized'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
     end
   end
