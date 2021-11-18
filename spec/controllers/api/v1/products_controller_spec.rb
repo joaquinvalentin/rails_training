@@ -7,10 +7,6 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
     @user ||= create(:user, :with_products)
   end
 
-  def product
-    @product ||= user.products.first
-  end
-
   describe 'GET #show' do
     def do_request(id)
       get :show, params: { id: id }
@@ -18,13 +14,13 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
     context 'when is successful' do
       it 'return successful' do
-        do_request(product.id)
+        do_request(user.products.first.id)
         expect(response).to have_http_status(:success)
       end
 
       it 'returns the product' do
-        do_request(product.id)
-        expect(JSON.parse(response.body)['title']).to eql(product.title)
+        do_request(user.products.first.id)
+        expect(JSON.parse(response.body)['title']).to eql(user.products.first.title)
       end
     end
 
@@ -48,8 +44,6 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
   describe 'GET #index' do
     context 'when is successful' do
-      let!(:products) { user.products }
-
       def do_request
         get :index
       end
@@ -60,8 +54,9 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       end
 
       it 'returns the list of products' do
+        title = user.products.first.title
         do_request
-        expect(JSON.parse(response.body).first['title']).to eql(products.first.title)
+        expect(JSON.parse(response.body).first['title']).to eql(title)
       end
     end
   end
@@ -105,7 +100,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       end
 
       it 'returns the product' do
-        do_request(product.id, { title: 'New Product' })
+        do_request(user.products.first.id, { title: 'New Product' })
         expect(JSON.parse(response.body)['title']).to eql('New Product')
       end
     end
@@ -113,7 +108,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
     context 'when parameters are invalid' do
       def do_request
         authenticate_user(user)
-        put :update, params: { id: product.id, product: { title: '' } }
+        put :update, params: { id: user.products.first.id, product: { title: '' } }
       end
 
       it 'returns the error message' do
@@ -162,7 +157,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
     context 'when is successful' do
       def do_request
         authenticate_user(user)
-        delete :destroy, params: { id: product.id }
+        delete :destroy, params: { id: user.products.first.id }
       end
 
       it 'returns no content' do
