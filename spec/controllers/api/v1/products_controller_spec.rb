@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::ProductsController, type: :controller do
   def user
-    @user ||= create_authenticated_user_with_products
+    @user ||= create(:user, :with_products)
   end
 
   def product
