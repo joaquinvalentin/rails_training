@@ -68,6 +68,10 @@ RSpec/StubbedMock:
 RSpec/ExampleLength:
   Max: 15
 
+RSpec/VariableName:
+  Exclude:
+    - spec/requests/**/*.rb
+
 RSpec/DescribeClass:
   Exclude:
     - spec/project/**/*.rb
