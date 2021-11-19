@@ -7,6 +7,10 @@ RSpec.describe 'api/v1/users', type: :request do
     "Bearer #{JsonWebToken.encode({ user_id: user.id })}"
   end
 
+  def user
+    @user ||= create(:user)
+  end
+
   describe 'Users' do
     path '/api/v1/users/{id}' do
       get 'Retrieve a user' do
@@ -15,8 +19,12 @@ RSpec.describe 'api/v1/users', type: :request do
         produces 'application/json'
         parameter name: :id, in: :path, type: :string
         response '200', 'User found' do
-          let(:user) { create(:user) }
           let(:id) { user.id }
+
+          include_context 'with integration test'
+        end
+        response '404', 'User not found' do
+          let(:id) { 0 }
 
           include_context 'with integration test'
         end
@@ -47,6 +55,11 @@ RSpec.describe 'api/v1/users', type: :request do
 
           include_context 'with integration test'
         end
+        response '422', 'Invalid parameters' do
+          let(:params) { { user: { email: 'bad_email', password: 'asd' } } }
+
+          include_context 'with integration test'
+        end
       end
     end
 
@@ -72,10 +85,16 @@ RSpec.describe 'api/v1/users', type: :request do
           }
         }
         response '200', 'User updated' do
-          let(:user) { create(:user) }
           let(:id) { user.id }
           let(:params) { { user: attributes_for(:user) } }
           let(:Authorization) { authentication_token(user) }
+
+          include_context 'with integration test'
+        end
+        response '401', 'Unauthorized' do
+          let(:id) { user.id }
+          let(:params) { { user: attributes_for(:user) } }
+          let(:Authorization) { '' }
 
           include_context 'with integration test'
         end
@@ -89,12 +108,17 @@ RSpec.describe 'api/v1/users', type: :request do
         consumes 'application/json'
         parameter name: :Authorization, in: :header, type: :string
         parameter name: :id, in: :path, type: :string
-        response '200', 'User deleted' do
-          let(:user) { create(:user) }
+        response '204', 'User deleted' do
           let(:id) { user.id }
           let(:Authorization) { authentication_token(user) }
 
-          include_context 'with integration test'
+          run_test!
+        end
+        response '401', 'Unauthorized' do
+          let(:id) { user.id }
+          let(:Authorization) { '' }
+
+          run_test!
         end
       end
     end

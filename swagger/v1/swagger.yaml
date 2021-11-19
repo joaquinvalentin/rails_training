@@ -21,7 +21,15 @@ paths:
           description: User found
           examples:
             application/json:
-              email: tyrone@wisoky-hills.io
+              email: teodora@streich.org
+        '404':
+          description: User not found
+          examples:
+            application/json:
+              description: Not found
+              details: Couldn't find User with 'id'=0
+              error_code: 4000
+              http_status: 404
     put:
       summary: Update a user
       tags:
@@ -42,7 +50,14 @@ paths:
           description: User updated
           examples:
             application/json:
-              email: erika_schuppe@beahan-beer.com
+              email: steven@schimmel.net
+        '401':
+          description: Unauthorized
+          examples:
+            application/json:
+              description: User can not be deleted or updated due to unauthorized
+              error_code: 4011
+              http_status: 401
       requestBody:
         content:
           application/json:
@@ -61,6 +76,26 @@ paths:
                   - password
                 required:
                 - user
+    delete:
+      summary: Delete a user
+      tags:
+      - Users
+      description: Delete a user.
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: User deleted
+        '401':
+          description: Unauthorized
   "/api/v1/users":
     post:
       summary: Create a user
@@ -73,7 +108,16 @@ paths:
           description: User created
           examples:
             application/json:
-              email: cleopatra@gorczany.io
+              email: portia.streich@harber.biz
+        '422':
+          description: Invalid parameters
+          examples:
+            application/json:
+              description: Cannot create profile due to invalid paramater
+              details:
+              - is not an email
+              error_code: 4022
+              http_status: 422
       requestBody:
         content:
           application/json:
@@ -99,7 +143,7 @@ servers:
       default: localhost:3000/
 components:
   securitySchemes:
-    Bearer:
+    BearerAuth:
       type: apiKey
       name: Authorization
       in: header
