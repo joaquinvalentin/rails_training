@@ -28,6 +28,11 @@ RSpec.describe 'api/v1/users', type: :request do
 
           include_context 'with integration test'
         end
+        response '500', 'Internal server error' do
+          let(:id) { 'invalid' }
+
+          document_response_without_test!
+        end
       end
     end
 
@@ -55,10 +60,15 @@ RSpec.describe 'api/v1/users', type: :request do
 
           include_context 'with integration test'
         end
-        response '422', 'Invalid parameters' do
+        response '422', 'Cannot create profile due to invalid paramater' do
           let(:params) { { user: { email: 'bad_email', password: 'asd' } } }
 
           include_context 'with integration test'
+        end
+        response '500', 'Internal server error' do
+          let(:params) { { user: { email: nil, password: nil } } }
+
+          document_response_without_test!
         end
       end
     end
@@ -91,12 +101,26 @@ RSpec.describe 'api/v1/users', type: :request do
 
           include_context 'with integration test'
         end
-        response '401', 'Unauthorized' do
+        response '401', 'User can not be deleted or updated due to unauthorized' do
           let(:id) { user.id }
           let(:params) { { user: attributes_for(:user) } }
           let(:Authorization) { '' }
 
           include_context 'with integration test'
+        end
+        response '422', 'Cannot update profile due to invalid paramater' do
+          let(:id) { user.id }
+          let(:params) { { user: { email: 'bad_email', password: 'asd' } } }
+          let(:Authorization) { authentication_token(user) }
+
+          include_context 'with integration test'
+        end
+        response '500', 'Internal server error' do
+          let(:id) { user.id }
+          let(:params) { { user: { email: nil, password: nil } } }
+          let(:Authorization) { authentication_token(user) }
+
+          document_response_without_test!
         end
       end
     end
@@ -114,11 +138,17 @@ RSpec.describe 'api/v1/users', type: :request do
 
           run_test!
         end
-        response '401', 'Unauthorized' do
+        response '401', 'User can not be deleted or updated due to unauthorized' do
           let(:id) { user.id }
           let(:Authorization) { '' }
 
           run_test!
+        end
+        response '500', 'Internal server error' do
+          let(:id) { '___' }
+          let(:Authorization) { authentication_token(user) }
+
+          document_response_without_test!
         end
       end
     end

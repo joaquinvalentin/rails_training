@@ -21,7 +21,7 @@ paths:
           description: User found
           examples:
             application/json:
-              email: teodora@streich.org
+              email: tomoko@christiansen.net
         '404':
           description: User not found
           examples:
@@ -30,6 +30,8 @@ paths:
               details: Couldn't find User with 'id'=0
               error_code: 4000
               http_status: 404
+        '500':
+          description: Internal server error
     put:
       summary: Update a user
       tags:
@@ -50,14 +52,25 @@ paths:
           description: User updated
           examples:
             application/json:
-              email: steven@schimmel.net
+              email: jarrett_lubowitz@hermiston-schmitt.name
         '401':
-          description: Unauthorized
+          description: User can not be deleted or updated due to unauthorized
           examples:
             application/json:
               description: User can not be deleted or updated due to unauthorized
               error_code: 4011
               http_status: 401
+        '422':
+          description: Cannot update profile due to invalid paramater
+          examples:
+            application/json:
+              description: Cannot update profile due to invalid paramater
+              details:
+              - is not an email
+              error_code: 4023
+              http_status: 422
+        '500':
+          description: Internal server error
       requestBody:
         content:
           application/json:
@@ -95,7 +108,9 @@ paths:
         '204':
           description: User deleted
         '401':
-          description: Unauthorized
+          description: User can not be deleted or updated due to unauthorized
+        '500':
+          description: Internal server error
   "/api/v1/users":
     post:
       summary: Create a user
@@ -108,9 +123,9 @@ paths:
           description: User created
           examples:
             application/json:
-              email: portia.streich@harber.biz
+              email: franklin.gerhold@ward.org
         '422':
-          description: Invalid parameters
+          description: Cannot create profile due to invalid paramater
           examples:
             application/json:
               description: Cannot create profile due to invalid paramater
@@ -118,6 +133,8 @@ paths:
               - is not an email
               error_code: 4022
               http_status: 422
+        '500':
+          description: Internal server error
       requestBody:
         content:
           application/json:
