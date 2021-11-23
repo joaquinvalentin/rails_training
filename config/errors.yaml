@@ -28,3 +28,15 @@
   :http_status: 422
   :error_code: 4023
   :description: 'Cannot update profile due to invalid paramater'
+4130:
+  :http_status: 400
+  :error_code: 4130
+  :description: 'Invalid parameter in product'
+4104:
+  :http_status: 404
+  :error_code: 4104
+  :description: 'Product not found'
+4111:
+  :http_status: 401
+  :error_code: 4111
+  :description: 'Product can not be deleted or updated due to being unauthorized'

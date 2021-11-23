@@ -8,4 +8,10 @@ module AuthenticationHelper
     @request.headers['Authorization'] = "Bearer #{jwt}"
     user
   end
+
+  def authenticate_user(user)
+    payload = { user_id: user.id }
+    jwt = JsonWebToken.encode(payload)
+    @request.headers['Authorization'] = "Bearer #{jwt}"
+  end
 end

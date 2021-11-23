@@ -105,6 +105,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when params are invalid' do
       let(:user_params) { { email: 'bad_email', password: '123456' } }
+      let(:headers) do
+        { 'Authorization': JsonWebToken.encode(user_id: user.id) }
+      end
 
       before { update_user_call(authenticated_user) }
 

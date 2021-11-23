@@ -77,6 +77,10 @@ GEM
     byebug (11.1.3)
     concurrent-ruby (1.1.9)
     crass (1.0.6)
+    database_cleaner-active_record (2.0.1)
+      activerecord (>= 5.a)
+      database_cleaner-core (~> 2.0.0)
+    database_cleaner-core (2.0.1)
     diff-lcs (1.4.4)
     docile (1.4.0)
     dotenv (2.7.6)
@@ -94,8 +98,6 @@ GEM
       activesupport (>= 5.0)
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
-    jsonapi-serializer (2.2.0)
-      activesupport (>= 4.2)
     jwt (2.3.0)
     listen (3.7.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -222,10 +224,10 @@ DEPENDENCIES
   blueprinter (~> 0.25.3)
   bootsnap (>= 1.4.4)
   byebug
+  database_cleaner-active_record
   dotenv-rails (~> 2.7.6)
   factory_bot_rails (~> 6.2.0)
   faker (~> 2.19.0)!
-  jsonapi-serializer (~> 2.2.0)
   jwt (~> 2.3)
   listen (~> 3.3)
   pg (~> 1.1)
