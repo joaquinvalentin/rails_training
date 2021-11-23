@@ -71,9 +71,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when is not successful' do
       let(:new_user) { { email: 'test.org', password: '123456' } }
 
-      it 'returns the error code 4022' do
+      it 'returns the error code 4004' do
         create_call(new_user)
-        expect(JSON.parse(response.body)['error_code']).to be(4022)
+        expect(JSON.parse(response.body)['error_code']).to be(4004)
       end
 
       it 'returns code 422' do
@@ -125,9 +125,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
-      it 'returns the error code 4023' do
+      it 'returns the error code 4005' do
         update_user_call(authenticated_user)
-        expect(JSON.parse(response.body)['error_code']).to be(4023)
+        expect(JSON.parse(response.body)['error_code']).to be(4005)
       end
     end
 
@@ -146,10 +146,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(response).to have_http_status(:unauthorized)
       end
 
-      it 'returns the error code 4011' do
+      it 'returns the error code 4003' do
         request.headers['Authorization'] = 'Bearer sdklhjflasgd'
         update_user_call(user)
-        expect(JSON.parse(response.body)['error_code']).to be(4011)
+        expect(JSON.parse(response.body)['error_code']).to be(4003)
       end
 
       it 'returns the error message' do
@@ -184,10 +184,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(response).to have_http_status(:unauthorized)
       end
 
-      it 'returns the error code 4011' do
+      it 'returns the error code 4003' do
         authenticated_user
         delete_user_call(user)
-        expect(JSON.parse(response.body)['error_code']).to be(4011)
+        expect(JSON.parse(response.body)['error_code']).to be(4003)
       end
 
       it 'returns the error message' do
@@ -205,10 +205,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(response).to have_http_status(:unauthorized)
       end
 
-      it 'returns the error code 4011' do
+      it 'returns the error code 4003' do
         request.headers['Authorization'] = nil
         delete_user_call(user)
-        expect(JSON.parse(response.body)['error_code']).to be(4011)
+        expect(JSON.parse(response.body)['error_code']).to be(4003)
       end
     end
 
@@ -219,10 +219,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(response).to have_http_status(:unauthorized)
       end
 
-      it 'returns the error code 4010' do
+      it 'returns the error code 4003' do
         request.headers['Authorization'] = 'Bearer sdklhjflasgd'
         delete_user_call(user)
-        expect(JSON.parse(response.body)['error_code']).to be(4011)
+        expect(JSON.parse(response.body)['error_code']).to be(4003)
       end
 
       it 'returns the error message' do

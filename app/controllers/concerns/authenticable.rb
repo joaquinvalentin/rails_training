@@ -21,6 +21,6 @@ module Authenticable
   protected
 
   def check_login
-    render_error(4111) unless current_user
+    render_error(4008) unless current_user
   end
 end

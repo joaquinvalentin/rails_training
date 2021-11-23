@@ -35,9 +35,9 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(JSON.parse(response.body)['details']).to eql("Couldn't find Product with 'id'=0")
       end
 
-      it 'returns the error code 4104' do
+      it 'returns the error code 4007' do
         make_request(0)
-        expect(JSON.parse(response.body)['error_code']).to be(4104)
+        expect(JSON.parse(response.body)['error_code']).to be(4007)
       end
     end
   end
@@ -85,9 +85,9 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(response).to have_http_status(:bad_request)
       end
 
-      it 'returns the error code 4130' do
+      it 'returns the error code 4006' do
         make_request({ product: { title: '', price: 10 } })
-        expect(JSON.parse(response.body)['error_code']).to be(4130)
+        expect(JSON.parse(response.body)['error_code']).to be(4006)
       end
     end
   end
@@ -121,9 +121,9 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(response).to have_http_status(:bad_request)
       end
 
-      it 'returns the error code 4130' do
+      it 'returns the error code 4006' do
         make_request
-        expect(JSON.parse(response.body)['error_code']).to be(4130)
+        expect(JSON.parse(response.body)['error_code']).to be(4006)
       end
     end
 
@@ -146,9 +146,9 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(response).to have_http_status(:unauthorized)
       end
 
-      it 'returns the error code 4111' do
+      it 'returns the error code 4008' do
         make_request
-        expect(JSON.parse(response.body)['error_code']).to be(4111)
+        expect(JSON.parse(response.body)['error_code']).to be(4008)
       end
     end
   end
@@ -182,9 +182,9 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(JSON.parse(response.body)['details']).to eql("Couldn't find Product with 'id'=0")
       end
 
-      it 'returns the error code 4104' do
+      it 'returns the error code 4007' do
         make_request
-        expect(JSON.parse(response.body)['error_code']).to be(4104)
+        expect(JSON.parse(response.body)['error_code']).to be(4007)
       end
     end
 
@@ -207,9 +207,9 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(response).to have_http_status(:unauthorized)
       end
 
-      it 'returns the error code 4111' do
+      it 'returns the error code 4008' do
         make_request
-        expect(JSON.parse(response.body)['error_code']).to be(4111)
+        expect(JSON.parse(response.body)['error_code']).to be(4008)
       end
     end
   end

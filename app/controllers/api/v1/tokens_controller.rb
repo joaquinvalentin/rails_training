@@ -3,7 +3,7 @@
 class Api::V1::TokensController < ApplicationController
   def create
     authenticated = user&.authenticate(user_params[:password])
-    return render_error(4011) unless authenticated
+    return render_error(4003) unless authenticated
 
     render json: {
       token: JsonWebToken.encode(user_id: user.id),

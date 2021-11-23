@@ -14,7 +14,7 @@ class Api::V1::UsersController < ApplicationController
     if user.save
       render json: UserSerializer.render(user), status: :created
     else
-      render_error(4022, user.errors.messages[:error])
+      render_error(4004, user.errors.messages[:error])
     end
   end
 
@@ -23,7 +23,7 @@ class Api::V1::UsersController < ApplicationController
     if user.update(user_params)
       render json: UserSerializer.render(user), status: :ok
     else
-      render_error(4023, user.errors.messages[:error])
+      render_error(4005, user.errors.messages[:error])
     end
   end
 
@@ -37,15 +37,11 @@ class Api::V1::UsersController < ApplicationController
     # TODO: Add error message
     # If current_user raise this exception for delete or update, it means that the user is not logged in
     # (and therefore not authorized to access this resource)
-    if request.delete? || request.put?
-      render_error(4010, exception.message)
-    else
-      render_error(4000, exception.message)
-    end
+    render_error(4000, exception.message)
   end
 
   rescue_from AuthenticationError do
-    render_error(4011)
+    render_error(4003)
   end
 
   private
@@ -61,5 +57,9 @@ class Api::V1::UsersController < ApplicationController
 
   def check_permissions
     render_error(4011) unless current_user&.admin? || current_user&.id == user.id
+  end
+
+  def check_owner
+    render_error(4003) unless user.id == current_user&.id
   end
 end

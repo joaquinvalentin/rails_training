@@ -12,31 +12,31 @@
   :http_status: 400
   :error_code: 4001
   :description: 'Missing Parameter'
-4010:
+4002:
   :http_status: 404
-  :error_code: 4010
+  :error_code: 4002
   :description: 'User can not be deleted or updated due to user not found'
-4011:
+4003:
   :http_status: 401
-  :error_code: 4011
+  :error_code: 4003
   :description: 'User can not be deleted or updated due to unauthorized'
-4022:
+4004:
   :http_status: 422
-  :error_code: 4022
-  :description: 'Cannot create profile due to invalid paramater'
-4023:
+  :error_code: 4004
+  :description: 'Cannot create profile due to invalid parameter'
+4005:
   :http_status: 422
-  :error_code: 4023
+  :error_code: 4005
   :description: 'Cannot update profile due to invalid paramater'
-4130:
+4006:
   :http_status: 400
-  :error_code: 4130
+  :error_code: 4006
   :description: 'Invalid parameter in product'
-4104:
+4007:
   :http_status: 404
-  :error_code: 4104
+  :error_code: 4007
   :description: 'Product not found'
-4111:
+4008:
   :http_status: 401
-  :error_code: 4111
+  :error_code: 4008
   :description: 'Product can not be deleted or updated due to being unauthorized'
