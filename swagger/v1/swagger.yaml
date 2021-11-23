@@ -4,6 +4,47 @@ info:
   title: API documentation for users
   version: v1
 paths:
+  "/api/v1/tokens":
+    post:
+      summary: create
+      tags:
+      - Token
+      description: Get a Json Web Token.
+      parameters: []
+      responses:
+        '200':
+          description: User created
+          examples:
+            application/json:
+              token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo4ODcsImV4cCI6MTYzNzc1OTA4NH0.-RvjZ06Y8XU8kqOzyyCgnJ28dI0gmpHDhUVzkDgzo6s
+              email: particia@barton.info
+        '401':
+          description: User not found
+          examples:
+            application/json:
+              description: User can not be deleted or updated due to unauthorized
+              error_code: 4011
+              http_status: 401
+        '500':
+          description: Internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - email
+                  - password
+                required:
+                - user
   "/api/v1/users/{id}":
     get:
       summary: Retrieve a user
@@ -21,7 +62,7 @@ paths:
           description: User found
           examples:
             application/json:
-              email: tomoko@christiansen.net
+              email: florene_goyette@lang.io
         '404':
           description: User not found
           examples:
@@ -52,7 +93,7 @@ paths:
           description: User updated
           examples:
             application/json:
-              email: jarrett_lubowitz@hermiston-schmitt.name
+              email: hilton@gislason.info
         '401':
           description: User can not be deleted or updated due to unauthorized
           examples:
@@ -123,7 +164,7 @@ paths:
           description: User created
           examples:
             application/json:
-              email: franklin.gerhold@ward.org
+              email: william_larson@schumm.info
         '422':
           description: Cannot create profile due to invalid paramater
           examples:
