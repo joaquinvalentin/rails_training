@@ -13,18 +13,18 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'GET #show' do
-    def do_request(id)
+    def make_request(id)
       get :show, params: { id: id }
     end
 
     context 'when is successful' do
       it 'return successful' do
-        do_request(user.id)
+        make_request(user.id)
         expect(response).to have_http_status(:success)
       end
 
       it 'returns the user' do
-        do_request(user.id)
+        make_request(user.id)
         # Test to ensure response contains the correct email
 
         expect(JSON.parse(response.body)['email']).to eql(user.email)
@@ -33,17 +33,17 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when is not successful' do
       it 'returns not found' do
-        do_request(0)
+        make_request(0)
         expect(response).to have_http_status(:not_found)
       end
 
       it 'returns the error message' do
-        do_request(0)
+        make_request(0)
         expect(JSON.parse(response.body)['details']).to eql("Couldn't find User with 'id'=0")
       end
 
       it 'returns the error code 4000' do
-        do_request(0)
+        make_request(0)
         expect(JSON.parse(response.body)['error_code']).to be(4000)
       end
     end
