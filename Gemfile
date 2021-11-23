@@ -79,3 +79,7 @@ gem 'blueprinter', '~> 0.25.3'
 group :test do
   gem 'database_cleaner-active_record'
 end
+
+group :development do
+  gem 'annotate'
+end
