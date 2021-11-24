@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::UsersController < ApplicationController
-  before_action :check_token
+  before_action :check_login
 
   # GET /users/1
   def show
