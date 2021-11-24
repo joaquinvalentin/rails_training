@@ -1,15 +1,17 @@
 # frozen_string_literal: true
 
 class Api::V1::UsersController < ApplicationController
-  before_action :check_owner, only: %i[update destroy]
+  before_action :check_token
 
   # GET /users/1
   def show
+    authorize user
     render json: UserSerializer.render(user)
   end
 
   # POST /users
   def create
+    authorize user
     user = User.new(user_params)
     if user.save
       render json: UserSerializer.render(user), status: :created
@@ -20,6 +22,7 @@ class Api::V1::UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
+    authorize user
     if user.update(user_params)
       render json: UserSerializer.render(user), status: :ok
     else
@@ -29,6 +32,7 @@ class Api::V1::UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
+    authorize user
     user.destroy
     head :no_content
   end
