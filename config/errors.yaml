@@ -7,7 +7,7 @@
 4000:
   :http_status: 404
   :error_code: 4000
-  :description: 'Not found'
+  :description: 'User not found'
 4001:
   :http_status: 400
   :error_code: 4001
