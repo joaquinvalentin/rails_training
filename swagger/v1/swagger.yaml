@@ -16,15 +16,14 @@ paths:
           description: User created
           examples:
             application/json:
-              token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo4ODcsImV4cCI6MTYzNzc1OTA4NH0.-RvjZ06Y8XU8kqOzyyCgnJ28dI0gmpHDhUVzkDgzo6s
-              email: particia@barton.info
+              token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc4NzE3MjB9.ptfPr2271Hye9h0kKW9D8vQmvQy-OBLYy3duleuu_E4
+              email: bong@beer.com
         '401':
           description: User not found
           examples:
             application/json:
               description: User can not be deleted or updated due to unauthorized
               error_code: 4011
-              http_status: 401
         '500':
           description: Internal server error
       requestBody:
@@ -62,7 +61,8 @@ paths:
           description: User found
           examples:
             application/json:
-              email: florene_goyette@lang.io
+              email: adrien@frami-oconner.net
+              id: 4
         '404':
           description: User not found
           examples:
@@ -70,7 +70,6 @@ paths:
               description: Not found
               details: Couldn't find User with 'id'=0
               error_code: 4000
-              http_status: 404
         '500':
           description: Internal server error
     put:
@@ -93,14 +92,14 @@ paths:
           description: User updated
           examples:
             application/json:
-              email: hilton@gislason.info
+              email: arden_runte@blick.co
+              id: 6
         '401':
           description: User can not be deleted or updated due to unauthorized
           examples:
             application/json:
               description: User can not be deleted or updated due to unauthorized
               error_code: 4011
-              http_status: 401
         '422':
           description: Cannot update profile due to invalid paramater
           examples:
@@ -109,7 +108,6 @@ paths:
               details:
               - is not an email
               error_code: 4023
-              http_status: 422
         '500':
           description: Internal server error
       requestBody:
@@ -164,7 +162,8 @@ paths:
           description: User created
           examples:
             application/json:
-              email: william_larson@schumm.info
+              email: harrison.kozey@schmeler.io
+              id: 5
         '422':
           description: Cannot create profile due to invalid paramater
           examples:
@@ -173,7 +172,6 @@ paths:
               details:
               - is not an email
               error_code: 4022
-              http_status: 422
         '500':
           description: Internal server error
       requestBody:
