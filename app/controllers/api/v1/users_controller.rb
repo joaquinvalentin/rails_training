@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::UsersController < ApplicationController
-  before_action :check_owner, only: %i[update destroy]
+  before_action :check_permissions, only: %i[update destroy]
 
   # GET /users/1
   def show
@@ -59,7 +59,7 @@ class Api::V1::UsersController < ApplicationController
     @user ||= User.find(params[:id])
   end
 
-  def check_owner
-    render_error(4011) unless user.id == current_user&.id
+  def check_permissions
+    render_error(4011) unless current_user&.admin? || current_user&.id == user.id
   end
 end
