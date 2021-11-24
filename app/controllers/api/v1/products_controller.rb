@@ -3,18 +3,22 @@
 class Api::V1::ProductsController < ApplicationController
   include Authenticable
 
-  before_action :check_login, only: %I[create]
+  before_action :check_login
   before_action :check_owner, only: %I[update destroy]
 
   def index
-    render json: ProductSerializer.render(Product.all)
+    products = policy_scope(Product)
+    render json: ProductSerializer.render(products)
   end
 
   def show
+    authorize product
     render json: ProductSerializer.render(product)
   end
 
   def create
+    return render_error(4111) if current_user.admin?
+
     product = current_user.products.build(product_params)
 
     return render json: ProductSerializer.render(product), status: :created if product.save
@@ -23,12 +27,14 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def update
+    authorize product
     return render json: ProductSerializer.render(product) if product.update(product_params)
 
     render_error(4201, product.errors.messages[:error])
   end
 
   def destroy
+    authorize product
     product.destroy
     head :no_content
   end
