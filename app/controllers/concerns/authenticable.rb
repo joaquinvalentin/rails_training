@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module Authenticable
+  include ErrorHandler
+
   def current_user
     return @current_user if @current_user
 
