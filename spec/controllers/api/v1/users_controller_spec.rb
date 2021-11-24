@@ -12,38 +12,68 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     @authenticated_user ||= create_authenticated_user
   end
 
+  def admin
+    @admin ||= create(:user, :is_admin)
+  end
+
+  def authenticated_admin
+    @authenticated_admin ||= create_authenticated_admin
+  end
+
   describe 'GET #show' do
-    def make_request(id)
-      get :show, params: { id: id }
+    def make_request(user)
+      get :show, params: { id: user.id }
     end
 
-    context 'when is successful' do
+    context 'when the admin was authenticated' do
       it 'return successful' do
-        make_request(user.id)
+        make_request(authenticated_admin)
         expect(response).to have_http_status(:success)
       end
 
       it 'returns the user' do
-        make_request(user.id)
+        make_request(authenticated_admin)
+        # Test to ensure response contains the correct email
+
+        expect(JSON.parse(response.body)['email']).to eql(authenticated_admin.email)
+      end
+    end
+
+    context 'when is successful' do
+      it 'return successful' do
+        create_authenticated_admin
+        make_request(user)
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns the user' do
+        create_authenticated_admin
+        make_request(user)
         # Test to ensure response contains the correct email
 
         expect(JSON.parse(response.body)['email']).to eql(user.email)
       end
     end
 
-    context 'when is not successful' do
+    context 'when the user does not exists' do
       it 'returns not found' do
-        make_request(0)
+        create_authenticated_admin
+        user.id = 0
+        make_request(user)
         expect(response).to have_http_status(:not_found)
       end
 
       it 'returns the error message' do
-        make_request(0)
+        create_authenticated_admin
+        user.id = 0
+        make_request(user)
         expect(JSON.parse(response.body)['details']).to eql("Couldn't find User with 'id'=0")
       end
 
       it 'returns the error code 4000' do
-        make_request(0)
+        create_authenticated_admin
+        user.id = 0
+        make_request(user)
         expect(JSON.parse(response.body)['error_code']).to be(4000)
       end
     end

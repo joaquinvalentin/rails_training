@@ -14,4 +14,12 @@ module AuthenticationHelper
     jwt = JsonWebToken.encode(payload)
     @request.headers['Authorization'] = "Bearer #{jwt}"
   end
+
+  def create_authenticated_admin
+    user = User.first || FactoryBot.create(:user, :is_admin)
+    payload = { user_id: user.id }
+    jwt = JsonWebToken.encode(payload)
+    @request.headers['Authorization'] = "Bearer #{jwt}"
+    user
+  end
 end
