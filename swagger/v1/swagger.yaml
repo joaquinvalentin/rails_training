@@ -1,0 +1,205 @@
+---
+openapi: 3.0.1
+info:
+  title: API documentation for users
+  version: v1
+paths:
+  "/api/v1/tokens":
+    post:
+      summary: create
+      tags:
+      - Token
+      description: Get a Json Web Token.
+      parameters: []
+      responses:
+        '200':
+          description: User created
+          examples:
+            application/json:
+              token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc4NzE3MjB9.ptfPr2271Hye9h0kKW9D8vQmvQy-OBLYy3duleuu_E4
+              email: bong@beer.com
+        '401':
+          description: User not found
+          examples:
+            application/json:
+              description: User can not be deleted or updated due to unauthorized
+              error_code: 4011
+        '500':
+          description: Internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - email
+                  - password
+                required:
+                - user
+  "/api/v1/users/{id}":
+    get:
+      summary: Retrieve a user
+      tags:
+      - Users
+      description: Get the user information.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User found
+          examples:
+            application/json:
+              email: adrien@frami-oconner.net
+              id: 4
+        '404':
+          description: User not found
+          examples:
+            application/json:
+              description: Not found
+              details: Couldn't find User with 'id'=0
+              error_code: 4000
+        '500':
+          description: Internal server error
+    put:
+      summary: Update a user
+      tags:
+      - Users
+      description: Update a user.
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User updated
+          examples:
+            application/json:
+              email: arden_runte@blick.co
+              id: 6
+        '401':
+          description: User can not be deleted or updated due to unauthorized
+          examples:
+            application/json:
+              description: User can not be deleted or updated due to unauthorized
+              error_code: 4011
+        '422':
+          description: Cannot update profile due to invalid paramater
+          examples:
+            application/json:
+              description: Cannot update profile due to invalid paramater
+              details:
+              - is not an email
+              error_code: 4023
+        '500':
+          description: Internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - email
+                  - password
+                required:
+                - user
+    delete:
+      summary: Delete a user
+      tags:
+      - Users
+      description: Delete a user.
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: User deleted
+        '401':
+          description: User can not be deleted or updated due to unauthorized
+        '500':
+          description: Internal server error
+  "/api/v1/users":
+    post:
+      summary: Create a user
+      tags:
+      - Users
+      description: Create a user.
+      parameters: []
+      responses:
+        '201':
+          description: User created
+          examples:
+            application/json:
+              email: harrison.kozey@schmeler.io
+              id: 5
+        '422':
+          description: Cannot create profile due to invalid paramater
+          examples:
+            application/json:
+              description: Cannot create profile due to invalid paramater
+              details:
+              - is not an email
+              error_code: 4022
+        '500':
+          description: Internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - email
+                  - password
+                required:
+                - user
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000/
+components:
+  securitySchemes:
+    BearerAuth:
+      type: apiKey
+      name: Authorization
+      in: header

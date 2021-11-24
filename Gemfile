@@ -25,7 +25,7 @@ gem 'puma', '~> 5.0'
 gem 'bootsnap', '>= 1.4.4', require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-# gem 'rack-cors'
+gem 'rack-cors', '~> 1.1.1'
 
 # gem 'dotenv', '~> 2.7.6'
 gem 'dotenv-rails', '~> 2.7.6'
@@ -43,6 +43,7 @@ gem 'rubocop-rspec', '~> 2.5.0', require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'rswag-specs', '~> 2.4.0'
 end
 
 group :development do
@@ -83,3 +84,7 @@ end
 group :development do
   gem 'annotate'
 end
+
+# For api documentation
+gem 'rswag-api', '~> 2.4.0'
+gem 'rswag-ui', '~> 2.4.0'
