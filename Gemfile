@@ -77,9 +77,11 @@ gem 'jwt', '~> 2.3'
 gem 'blueprinter', '~> 0.25.3'
 
 group :test do
-  gem 'database_cleaner-active_record'
+  gem 'database_cleaner-active_record', '~> 2.0.1'
 end
 
 group :development do
-  gem 'annotate'
+  gem 'annotate', '~> 3.1.1'
 end
+
+gem 'pundit', '~> 2.1.1'
