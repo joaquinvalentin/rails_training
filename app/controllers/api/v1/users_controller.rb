@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::UsersController < ApplicationController
-  before_action :check_token
+  before_action :check_login
 
   # GET /users/1
   def show
@@ -61,9 +61,5 @@ class Api::V1::UsersController < ApplicationController
 
   def user
     @user ||= User.find(params[:id])
-  end
-
-  def check_token
-    render_error(4011) if current_user.nil?
   end
 end
