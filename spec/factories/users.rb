@@ -23,5 +23,11 @@ FactoryBot.define do
         create(:product, user: user)
       end
     end
+
+    trait :is_admin do
+      after(:create) do |user|
+        user.update(admin: true)
+      end
+    end
   end
 end
