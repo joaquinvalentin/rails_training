@@ -14,11 +14,13 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
     context 'when is successful' do
       it 'return successful' do
+        authenticate_user(user)
         make_request(user.products.first.id)
         expect(response).to have_http_status(:success)
       end
 
       it 'returns the product' do
+        authenticate_user(user)
         make_request(user.products.first.id)
         expect(JSON.parse(response.body)['title']).to eql(user.products.first.title)
       end
@@ -26,16 +28,19 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
     context 'when is not successful' do
       it 'returns not found' do
+        authenticate_user(user)
         make_request(0)
         expect(response).to have_http_status(:not_found)
       end
 
       it 'returns the error message' do
+        authenticate_user(user)
         make_request(0)
         expect(JSON.parse(response.body)['details']).to eql("Couldn't find Product with 'id'=0")
       end
 
       it 'returns the error code 4202' do
+        authenticate_user(user)
         make_request(0)
         expect(JSON.parse(response.body)['error_code']).to be(4202)
       end
@@ -49,11 +54,13 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       end
 
       it 'return successful' do
+        authenticate_user(user)
         make_request
         expect(response).to have_http_status(:success)
       end
 
       it 'returns the list of products' do
+        authenticate_user(user)
         title = user.products.first.title
         make_request
         expect(JSON.parse(response.body).first['title']).to eql(title)
