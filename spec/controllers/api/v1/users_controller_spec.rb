@@ -88,30 +88,35 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       let(:new_user) { { email: 'test@test.org', password: '123456' } }
 
       it 'returns successful' do
+        authenticate_user(admin)
         create_call(new_user)
         expect(response).to have_http_status(:created)
       end
 
       it 'returns the user' do
+        authenticate_user(admin)
         create_call(new_user)
         expect(JSON.parse(response.body)['email']).to eql(new_user[:email])
       end
     end
 
-    context 'when is not successful' do
+    context 'when params are invalid' do
       let(:new_user) { { email: 'test.org', password: '123456' } }
 
       it 'returns the error code 4104' do
+        authenticate_user(admin)
         create_call(new_user)
         expect(JSON.parse(response.body)['error_code']).to be(4104)
       end
 
       it 'returns code 422' do
+        authenticate_user(admin)
         create_call(new_user)
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'returns a error' do
+        authenticate_user(admin)
         create_call(new_user)
         expect(JSON.parse(response.body)['details']).to eql(['is not an email'])
       end
@@ -129,34 +134,31 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when is successful' do
       it 'returns successful' do
-        update_user_call(authenticated_user)
+        update_user_call(authenticated_admin)
         expect(response).to have_http_status(:success)
       end
 
       it 'returns the user' do
-        update_user_call(authenticated_user)
+        update_user_call(authenticated_admin)
         expect(JSON.parse(response.body)['email']).to eql('email@dominio.com')
       end
     end
 
     context 'when params are invalid' do
       let(:user_params) { { email: 'bad_email', password: '123456' } }
-      let(:headers) do
-        { 'Authorization': JsonWebToken.encode(user_id: user.id) }
-      end
 
       it 'returns a error' do
-        update_user_call(authenticated_user)
+        update_user_call(authenticated_admin)
         expect(JSON.parse(response.body)['details']).to eql(['is not an email'])
       end
 
       it 'error status is 422' do
-        update_user_call(authenticated_user)
+        update_user_call(authenticated_admin)
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'returns the error code 4105' do
-        update_user_call(authenticated_user)
+        update_user_call(authenticated_admin)
         expect(JSON.parse(response.body)['error_code']).to be(4105)
       end
     end
@@ -198,30 +200,33 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when is successful' do
       it 'returns no content' do
-        delete_user_call(authenticated_user)
+        authenticate_user(admin)
+        delete_user_call(user)
         expect(response).to have_http_status(:no_content)
       end
 
       it 'destroy the user' do
-        delete_user_call(authenticated_user)
-        expect(User.find_by(id: authenticated_user.id).nil?).to be(true)
+        authenticate_user(admin)
+        delete_user_call(user)
+        expect(User.find_by(id: user.id).nil?).to be(true)
       end
     end
 
-    context 'when the user is other' do
+    context 'when the user is not admin' do
       it 'returns unauthorized' do
+        authenticate_user(user)
         delete_user_call(user)
         expect(response).to have_http_status(:unauthorized)
       end
 
       it 'returns the error code 4103' do
-        authenticated_user
+        authenticate_user(user)
         delete_user_call(user)
         expect(JSON.parse(response.body)['error_code']).to be(4103)
       end
 
       it 'returns the error message' do
-        authenticated_user
+        authenticate_user(user)
         delete_user_call(user)
         error_message = 'User can not be deleted or updated due to unauthorized request'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
