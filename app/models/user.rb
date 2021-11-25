@@ -9,6 +9,7 @@
 #  password_digest :string           not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  admin           :boolean          default(FALSE)
 #
 class User < ActiveRecord::Base
   validates :email, uniqueness: true, email: true
@@ -17,4 +18,8 @@ class User < ActiveRecord::Base
   has_secure_password
 
   has_many :products, dependent: :destroy
+
+  def admin?
+    admin
+  end
 end

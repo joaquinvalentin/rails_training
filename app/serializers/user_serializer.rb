@@ -9,6 +9,7 @@
 #  password_digest :string           not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  admin           :boolean          default(FALSE)
 #
 class UserSerializer < Blueprinter::Base
   field :id

@@ -9,6 +9,7 @@
 #  password_digest :string           not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  admin           :boolean          default(FALSE)
 #
 require 'faker'
 
@@ -20,6 +21,12 @@ FactoryBot.define do
     trait :with_products do
       after(:create) do |user|
         create(:product, user: user)
+      end
+    end
+
+    trait :is_admin do
+      after(:create) do |user|
+        user.update(admin: true)
       end
     end
   end

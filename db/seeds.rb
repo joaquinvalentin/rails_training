@@ -9,6 +9,12 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 user_ids = []
+
+admin = User.create!(
+  email: 'admin@xl.com', password: 'password', admin: true
+)
+puts "Created a new admin: #{admin.email}"
+
 5.times do
   user = User.create!(
     email: Faker::Internet.email, password: Faker::Internet.password
