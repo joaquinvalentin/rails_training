@@ -33,11 +33,8 @@ class Api::V1::UsersController < ApplicationController
   # DELETE /users/1
   def destroy
     authorize user
-    if user.destroy
-      head :no_content
-    else
-      render_error(4011)
-    end
+    user.destroy
+    head :no_content
   end
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
