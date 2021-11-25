@@ -25,7 +25,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       get :show, params: { id: user.id }
     end
 
-    context 'when the admin was authenticated' do
+    context 'when the user is admin and was authenticated' do
       it 'return successful' do
         make_request(authenticated_admin)
         expect(response).to have_http_status(:success)
@@ -39,19 +39,41 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
     end
 
-    context 'when is successful' do
-      it 'return successful' do
-        create_authenticated_admin
+    context 'when the user is not logged' do
+      it 'return unauthorized' do
         make_request(user)
-        expect(response).to have_http_status(:success)
+        expect(response).to have_http_status(:unauthorized)
       end
 
-      it 'returns the user' do
-        create_authenticated_admin
+      it 'returns the error message ' do
         make_request(user)
-        # Test to ensure response contains the correct email
+        expect(JSON.parse(response.body)['description']).to eql('User is not logged in')
+      end
 
-        expect(JSON.parse(response.body)['email']).to eql(user.email)
+      it 'returns the error code 4009' do
+        make_request(user)
+        expect(JSON.parse(response.body)['error_code']).to be(4009)
+      end
+    end
+
+    context 'when the user is logged but not admin' do
+      it 'return unauthorized' do
+        authenticate_user(user)
+        make_request(user)
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the error message ' do
+        authenticate_user(user)
+        make_request(user)
+        error_message = 'User cannot perform this action due to being unauthorized'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
+
+      it 'returns the error code 4011' do
+        authenticate_user(user)
+        make_request(user)
+        expect(JSON.parse(response.body)['error_code']).to be(4011)
       end
     end
 
