@@ -56,7 +56,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
     end
 
-    context 'when the user is logged but not admin' do
+    context 'when the user is logged but is not admin' do
       it 'return unauthorized' do
         authenticate_user(user)
         make_request(user)
@@ -106,7 +106,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       post :create, params: { user: user_params }
     end
 
-    context 'when is successful' do
+    context 'when the user is admin and was authenticated' do
       let(:new_user) { { email: 'test@test.org', password: '123456' } }
 
       it 'returns successful' do
@@ -141,6 +141,28 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         authenticate_user(admin)
         create_call(new_user)
         expect(JSON.parse(response.body)['details']).to eql(['is not an email'])
+      end
+    end
+
+    context 'when the email was taken by other user' do
+      let(:new_user) { { email: user.email, password: '123456' } }
+
+      it 'returns the error code 4106' do
+        authenticate_user(admin)
+        create_call(new_user)
+        expect(JSON.parse(response.body)['error_code']).to be(4106)
+      end
+
+      it 'returns code 422' do
+        authenticate_user(admin)
+        create_call(new_user)
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it 'returns a error' do
+        authenticate_user(admin)
+        create_call(new_user)
+        expect(JSON.parse(response.body)['description']).to eql('The email is already in use')
       end
     end
   end
@@ -211,6 +233,28 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         update_user_call(user)
         error_message = 'Cannot perform this action over user due to unauthenticated request'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
+    end
+
+    context 'when the email was taken by other user' do
+      let(:user_params) { { email: user.email, password: admin.password } }
+
+      it 'returns the error code 4106' do
+        authenticate_user(admin)
+        update_user_call(admin)
+        expect(JSON.parse(response.body)['error_code']).to be(4106)
+      end
+
+      it 'returns code 422' do
+        authenticate_user(admin)
+        update_user_call(admin)
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it 'returns a error' do
+        authenticate_user(admin)
+        update_user_call(admin)
+        expect(JSON.parse(response.body)['description']).to eql('The email is already in use')
       end
     end
   end

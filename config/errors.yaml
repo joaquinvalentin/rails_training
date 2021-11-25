@@ -39,6 +39,10 @@
   :http_status: 422
   :error_code: 4105
   :description: 'Cannot update user profile to invalid paramater'
+4106:
+  :http_status: 422
+  :error_code: 4106
+  :description: 'The email is already in use'
 4107:
   :http_status: 401
   :error_code: 4107

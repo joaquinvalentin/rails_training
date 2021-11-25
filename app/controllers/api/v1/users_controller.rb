@@ -15,8 +15,10 @@ class Api::V1::UsersController < ApplicationController
     authorize user
     if user.save
       render json: UserSerializer.render(user), status: :created
-    else
-      render_error(4104, user.errors.messages[:error])
+    elsif email_taken
+      render_error(4106)
+      else
+        render_error(4104, user.errors.messages[:error])
     end
   end
 
@@ -25,8 +27,10 @@ class Api::V1::UsersController < ApplicationController
     authorize user
     if user.update(user_params)
       render json: UserSerializer.render(user), status: :ok
-    else
-      render_error(4105, user.errors.messages[:error])
+    elsif email_taken
+      render_error(4106)
+      else
+        render_error(4105, user.errors.messages[:error])
     end
   end
 
@@ -63,15 +67,7 @@ class Api::V1::UsersController < ApplicationController
     @user ||= User.find(params[:id])
   end
 
-  def check_owner
-    if current_user
-      render_error(4103) unless user.id == current_user&.id
-    else
-      render_error(4107)
-    end
-  end
-
-  def check_login
-    render_error(4107) unless current_user
+  def email_taken
+    !User.find_by_email(user_params[:email]).nil?
   end
 end
