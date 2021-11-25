@@ -11,8 +11,8 @@ class Api::V1::UsersController < ApplicationController
 
   # POST /users
   def create
-    authorize user
     user = User.new(user_params)
+    authorize user
     if user.save
       render json: UserSerializer.render(user), status: :created
     else
@@ -33,8 +33,11 @@ class Api::V1::UsersController < ApplicationController
   # DELETE /users/1
   def destroy
     authorize user
-    user.destroy
-    head :no_content
+    if user.destroy
+      head :no_content
+    else
+      render_error(4011)
+    end
   end
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
@@ -46,7 +49,13 @@ class Api::V1::UsersController < ApplicationController
     render_error(4107)
   end
 
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
   private
+
+  def user_not_authorized(exception)
+    render_error(4011, exception.message)
+  end
 
   # Only allow a trusted parameter "white list" through.
   def user_params
