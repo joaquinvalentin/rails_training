@@ -122,6 +122,29 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
     end
 
+    context 'when the user is not admin' do
+      let(:new_user) { { email: 'test@test.org', password: '123456' } }
+
+      it 'returns unauthorized' do
+        authenticate_user(user)
+        create_call(new_user)
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the error code 4011' do
+        authenticate_user(user)
+        create_call(new_user)
+        expect(JSON.parse(response.body)['error_code']).to be(4011)
+      end
+
+      it 'returns the error message' do
+        authenticate_user(user)
+        create_call(new_user)
+        error_message = 'User cannot perform this action due to being unauthorized'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
+    end
+
     context 'when params are invalid' do
       let(:new_user) { { email: 'test.org', password: '123456' } }
 
@@ -176,7 +199,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       put :update, params: { id: user.id, user: user_params }
     end
 
-    context 'when is successful' do
+    context 'when the user is admin and was authenticated' do
       it 'returns successful' do
         update_user_call(authenticated_admin)
         expect(response).to have_http_status(:success)
@@ -255,6 +278,24 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         authenticate_user(admin)
         update_user_call(admin)
         expect(JSON.parse(response.body)['description']).to eql('The email is already in use')
+      end
+    end
+
+    context 'when user is not an admin' do
+      it 'returns a error' do
+        update_user_call(authenticated_user)
+        error_message = 'User cannot perform this action due to being unauthorized'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
+
+      it 'error status is 422' do
+        update_user_call(authenticated_user)
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the error code 4011' do
+        update_user_call(authenticated_user)
+        expect(JSON.parse(response.body)['error_code']).to be(4011)
       end
     end
   end
