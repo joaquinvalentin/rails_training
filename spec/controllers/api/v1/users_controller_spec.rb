@@ -305,7 +305,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       delete :destroy, params: { id: user_to_destroy.id }
     end
 
-    context 'when is successful' do
+    context 'when the user is admin and was authenticated' do
       it 'returns no content' do
         authenticate_user(admin)
         delete_user_call(user)
