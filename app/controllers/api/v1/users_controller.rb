@@ -14,7 +14,7 @@ class Api::V1::UsersController < ApplicationController
     if user.save
       render json: UserSerializer.render(user), status: :created
     else
-      render_error(4004, user.errors.messages[:error])
+      render_error(4104, user.errors.messages[:error])
     end
   end
 
@@ -23,7 +23,7 @@ class Api::V1::UsersController < ApplicationController
     if user.update(user_params)
       render json: UserSerializer.render(user), status: :ok
     else
-      render_error(4005, user.errors.messages[:error])
+      render_error(4105, user.errors.messages[:error])
     end
   end
 
@@ -35,13 +35,11 @@ class Api::V1::UsersController < ApplicationController
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
     # TODO: Add error message
-    # If current_user raise this exception for delete or update, it means that the user is not logged in
-    # (and therefore not authorized to access this resource)
-    render_error(4000, exception.message)
+    render_error(4100, exception.message)
   end
 
   rescue_from AuthenticationError do
-    render_error(4003)
+    render_error(4002)
   end
 
   private
@@ -60,6 +58,10 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def check_owner
-    render_error(4003) unless user.id == current_user&.id
+    if current_user
+      render_error(4103) unless user.id == current_user&.id
+    else
+      render_error(4002)
+    end
   end
 end
