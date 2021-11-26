@@ -141,9 +141,9 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(JSON.parse(response.body)['description']).to eql(message_expected)
       end
 
-      it 'returns unauthorized' do
+      it 'returns forbidden' do
         make_request
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
 
       it 'returns the error code 4203' do
@@ -204,7 +204,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
       it 'returns unauthorized' do
         make_request
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
 
       it 'returns the error code 4203' do

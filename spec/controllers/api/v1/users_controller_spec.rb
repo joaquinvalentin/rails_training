@@ -58,10 +58,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
 
     context 'when the user is logged but is not admin' do
-      it 'return unauthorized' do
+      it 'return forbidden' do
         authenticate_user(user)
         make_request(user)
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
 
       it 'returns the error message ' do
@@ -126,10 +126,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when the user is not admin' do
       let(:new_user) { { email: 'test@test.org', password: '123456' } }
 
-      it 'returns unauthorized' do
+      it 'returns forbidden' do
         authenticate_user(user)
         create_call(new_user)
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
 
       it 'returns the error code 4103' do
@@ -289,9 +289,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
 
-      it 'error status is 422' do
+      it 'error status is forbidden' do
         update_user_call(authenticated_user)
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
 
       it 'returns the error code 4103' do
@@ -321,10 +321,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
 
     context 'when the user is not admin' do
-      it 'returns unauthorized' do
+      it 'returns forbidden' do
         authenticate_user(user)
         delete_user_call(user)
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
 
       it 'returns the error code 4103' do
