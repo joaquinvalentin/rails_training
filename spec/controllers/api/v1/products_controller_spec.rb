@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::ProductsController, type: :controller do
   def user
-    @user ||= create(:user, :with_products)
+    @user ||= create(:user, :with_product)
   end
 
   describe 'GET #show' do
@@ -136,7 +136,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
     context 'when user is not the owner' do
       def make_request
-        other_user = create(:user, :with_products)
+        other_user = create(:user, :with_product)
         other_product = other_user.products.first
         authenticate_user(user)
         put :update, params: { id: other_product.id, product: { title: 'New Product' } }
@@ -197,7 +197,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
     context 'when user is not the owner' do
       def make_request
-        other_user = create(:user, :with_products)
+        other_user = create(:user, :with_product)
         other_product = other_user.products.first
         authenticate_user(user)
         delete :destroy, params: { id: other_product.id }
