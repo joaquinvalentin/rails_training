@@ -35,7 +35,9 @@ class ProductPolicy
     end
 
     def resolve
-      scope.all unless user.admin?
+      raise Pundit::NotAuthorizedError if user.admin?
+
+      scope.all
     end
 
     private
