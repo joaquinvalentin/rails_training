@@ -1,42 +1,59 @@
 # frozen_string_literal: true
 
+# Generic errors
 5000:
   :http_status: 500
   :error_code: 5000
   :description: 'Internal server error'
-4000:
-  :http_status: 404
-  :error_code: 4000
-  :description: 'User not found'
 4001:
   :http_status: 400
   :error_code: 4001
   :description: 'Missing Parameter'
 4002:
-  :http_status: 404
+  :http_status: 401
   :error_code: 4002
-  :description: 'User can not be deleted or updated due to user not found'
+  :description: 'Cannot perform this action due to unauthenticated request'
 4003:
   :http_status: 401
   :error_code: 4003
-  :description: 'User can not be deleted or updated due to unauthorized'
-4004:
-  :http_status: 422
-  :error_code: 4004
-  :description: 'Cannot create profile due to invalid parameter'
-4005:
-  :http_status: 422
-  :error_code: 4005
-  :description: 'Cannot update profile due to invalid paramater'
-4006:
-  :http_status: 400
-  :error_code: 4006
-  :description: 'Invalid parameter in product'
-4007:
+  :description: 'Invalid credentials'
+
+# User errors
+4100:
   :http_status: 404
-  :error_code: 4007
+  :error_code: 4100
+  :description: 'User not found'
+4102:
+  :http_status: 404
+  :error_code: 4102
+  :description: 'User can not be deleted or updated due to user not found'
+4103:
+  :http_status: 401
+  :error_code: 4103
+  :description: 'User can not be deleted or updated due to unauthorized request'
+4104:
+  :http_status: 422
+  :error_code: 4104
+  :description: 'Cannot create profile due to invalid parameters'
+4105:
+  :http_status: 422
+  :error_code: 4105
+  :description: 'Cannot update profile due to invalid paramater'
+
+# Product errors  
+4200:
+  :http_status: 400
+  :error_code: 4200
+  :description: 'Product can not be created due to bad request'
+4201:
+  :http_status: 400
+  :error_code: 4201
+  :description: 'Product can not be updated due to bad request'
+4202:
+  :http_status: 404
+  :error_code: 4202
   :description: 'Product not found'
-4008:
+4203:
   :http_status: 401
   :error_code: 4008
-  :description: 'Product can not be deleted or updated due to being unauthorized'
+  :description: 'Product can not be deleted or updated due to unauthorized request'
