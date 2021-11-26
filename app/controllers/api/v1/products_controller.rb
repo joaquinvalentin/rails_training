@@ -48,7 +48,7 @@ class Api::V1::ProductsController < ApplicationController
   private
 
   def user_not_authorized(exception)
-    render_error(4011, exception.message)
+    render_error(4204, exception.message)
   end
 
   def product_params

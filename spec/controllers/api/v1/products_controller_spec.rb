@@ -49,25 +49,25 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
     end
 
     context 'when the user does not have permissions' do
-      it 'returns unauthorized' do
+      it 'returns forbidden' do
         id = user.products.first.id
         authenticate_user(admin)
         make_request(id)
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
 
-      it 'returns the error code 4011' do
+      it 'returns the error code 4204' do
         id = user.products.first.id
         authenticate_user(admin)
         make_request(id)
-        expect(JSON.parse(response.body)['error_code']).to be(4011)
+        expect(JSON.parse(response.body)['error_code']).to be(4204)
       end
 
       it 'returns an error message' do
         id = user.products.first.id
         authenticate_user(admin)
         make_request(id)
-        error_message = 'User cannot perform this action due to being unauthorized'
+        error_message = 'Cannot perform this action over product due to unauthorized request'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
     end
@@ -94,22 +94,22 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
     end
 
     context 'when the user does not have permissions' do
-      it 'returns unauthorized' do
+      it 'returns forbidden' do
         authenticate_user(admin)
         make_request
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
 
-      it 'returns the error code 4011' do
+      it 'returns the error code 4204' do
         authenticate_user(admin)
         make_request
-        expect(JSON.parse(response.body)['error_code']).to be(4011)
+        expect(JSON.parse(response.body)['error_code']).to be(4204)
       end
 
       it 'returns an error message' do
         authenticate_user(admin)
         make_request
-        error_message = 'User cannot perform this action due to being unauthorized'
+        error_message = 'Cannot perform this action over product due to unauthorized request'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
     end
