@@ -4,7 +4,11 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::ProductsController, type: :controller do
   def user
-    @user ||= create(:user, :with_product)
+    @user ||= create_auth_user_with_prod
+  end
+
+  def admin
+    @admin ||= create_authenticated_admin
   end
 
   describe 'GET #show' do
@@ -12,21 +16,19 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       get :show, params: { id: id }
     end
 
-    context 'when is successful' do
+    context 'when the user has permissions' do
       it 'return successful' do
-        authenticate_user(user)
         make_request(user.products.first.id)
         expect(response).to have_http_status(:success)
       end
 
       it 'returns the product' do
-        authenticate_user(user)
         make_request(user.products.first.id)
         expect(JSON.parse(response.body)['title']).to eql(user.products.first.title)
       end
     end
 
-    context 'when is not successful' do
+    context 'when the product does not exist' do
       it 'returns not found' do
         authenticate_user(user)
         make_request(0)
@@ -45,14 +47,38 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(JSON.parse(response.body)['error_code']).to be(4202)
       end
     end
+
+    context 'when the user does not have permissions' do
+      it 'returns unauthorized' do
+        id = user.products.first.id
+        authenticate_user(admin)
+        make_request(id)
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the error code 4011' do
+        id = user.products.first.id
+        authenticate_user(admin)
+        make_request(id)
+        expect(JSON.parse(response.body)['error_code']).to be(4011)
+      end
+
+      it 'returns an error message' do
+        id = user.products.first.id
+        authenticate_user(admin)
+        make_request(id)
+        error_message = 'User cannot perform this action due to being unauthorized'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
+    end
   end
 
   describe 'GET #index' do
-    context 'when is successful' do
-      def make_request
-        get :index
-      end
+    def make_request
+      get :index
+    end
 
+    context 'when is successful' do
       it 'return successful' do
         authenticate_user(user)
         make_request
@@ -64,6 +90,27 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         title = user.products.first.title
         make_request
         expect(JSON.parse(response.body).first['title']).to eql(title)
+      end
+    end
+
+    context 'when the user does not have permissions' do
+      it 'returns unauthorized' do
+        authenticate_user(admin)
+        make_request
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the error code 4011' do
+        authenticate_user(admin)
+        make_request
+        expect(JSON.parse(response.body)['error_code']).to be(4011)
+      end
+
+      it 'returns an error message' do
+        authenticate_user(admin)
+        make_request
+        error_message = 'User cannot perform this action due to being unauthorized'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
     end
   end
@@ -136,8 +183,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
     context 'when user is not the owner' do
       def make_request
-        other_user = create(:user, :with_product)
-        other_product = other_user.products.first
+        other_product = create(:user, :with_product).products.first
         authenticate_user(user)
         put :update, params: { id: other_product.id, product: { title: 'New Product' } }
       end

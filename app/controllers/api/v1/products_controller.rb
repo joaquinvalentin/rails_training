@@ -43,7 +43,13 @@ class Api::V1::ProductsController < ApplicationController
     render_error(4202, exception.message)
   end
 
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
   private
+
+  def user_not_authorized(exception)
+    render_error(4011, exception.message)
+  end
 
   def product_params
     params.require(:product).permit(:title, :price, :published)
