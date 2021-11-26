@@ -30,7 +30,7 @@
 4103:
   :http_status: 401
   :error_code: 4103
-  :description: 'User can not be deleted or updated due to unauthorized request'
+  :description: 'User cannot perform this action due to unauthorized request'
 4104:
   :http_status: 422
   :error_code: 4104

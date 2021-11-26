@@ -47,12 +47,13 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       it 'returns the error message ' do
         make_request(user)
-        expect(JSON.parse(response.body)['description']).to eql('User is not logged in')
+        error_message = 'Cannot perform this action due to unauthenticated request'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
 
-      it 'returns the error code 4009' do
+      it 'returns the error code 4002' do
         make_request(user)
-        expect(JSON.parse(response.body)['error_code']).to be(4009)
+        expect(JSON.parse(response.body)['error_code']).to be(4002)
       end
     end
 
@@ -66,14 +67,14 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       it 'returns the error message ' do
         authenticate_user(user)
         make_request(user)
-        error_message = 'User cannot perform this action due to being unauthorized'
+        error_message = 'User cannot perform this action due to unauthorized request'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
 
-      it 'returns the error code 4011' do
+      it 'returns the error code 4103' do
         authenticate_user(user)
         make_request(user)
-        expect(JSON.parse(response.body)['error_code']).to be(4011)
+        expect(JSON.parse(response.body)['error_code']).to be(4103)
       end
     end
 
@@ -131,16 +132,16 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(response).to have_http_status(:unauthorized)
       end
 
-      it 'returns the error code 4011' do
+      it 'returns the error code 4103' do
         authenticate_user(user)
         create_call(new_user)
-        expect(JSON.parse(response.body)['error_code']).to be(4011)
+        expect(JSON.parse(response.body)['error_code']).to be(4103)
       end
 
       it 'returns the error message' do
         authenticate_user(user)
         create_call(new_user)
-        error_message = 'User cannot perform this action due to being unauthorized'
+        error_message = 'User cannot perform this action due to unauthorized request'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
     end
@@ -284,7 +285,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when user is not an admin' do
       it 'returns a error' do
         update_user_call(authenticated_user)
-        error_message = 'User cannot perform this action due to being unauthorized'
+        error_message = 'User cannot perform this action due to unauthorized request'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
 
@@ -293,9 +294,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(response).to have_http_status(:unauthorized)
       end
 
-      it 'returns the error code 4011' do
+      it 'returns the error code 4103' do
         update_user_call(authenticated_user)
-        expect(JSON.parse(response.body)['error_code']).to be(4011)
+        expect(JSON.parse(response.body)['error_code']).to be(4103)
       end
     end
   end
@@ -335,7 +336,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       it 'returns the error message' do
         authenticate_user(user)
         delete_user_call(user)
-        error_message = 'User can not be deleted or updated due to unauthorized request'
+        error_message = 'User cannot perform this action due to unauthorized request'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
     end

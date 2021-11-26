@@ -42,7 +42,6 @@ class Api::V1::UsersController < ApplicationController
   end
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
-    # TODO: Add error message
     render_error(4100, exception.message)
   end
 
@@ -55,7 +54,7 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def user_not_authorized(exception)
-    render_error(4011, exception.message)
+    render_error(4103, exception.message)
   end
 
   # Only allow a trusted parameter "white list" through.
