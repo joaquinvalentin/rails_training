@@ -55,5 +55,5 @@
   :description: 'Product not found'
 4203:
   :http_status: 401
-  :error_code: 4008
+  :error_code: 4203
   :description: 'Product can not be deleted or updated due to unauthorized request'
