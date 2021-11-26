@@ -13,24 +13,24 @@ class Api::V1::UsersController < ApplicationController
   def create
     user = User.new(user_params)
     authorize user
+    return render_error(4106) if user_by_email
+
     if user.save
       render json: UserSerializer.render(user), status: :created
-    elsif email_taken
-      render_error(4106)
-      else
-        render_error(4104, user.errors.messages[:error])
+    else
+      render_error(4104, user.errors.messages[:error])
     end
   end
 
   # PATCH/PUT /users/1
   def update
     authorize user
+    return render_error(4106) if user_by_email
+
     if user.update(user_params)
       render json: UserSerializer.render(user), status: :ok
-    elsif email_taken
-      render_error(4106)
-      else
-        render_error(4105, user.errors.messages[:error])
+    else
+      render_error(4105, user.errors.messages[:error])
     end
   end
 
@@ -67,7 +67,7 @@ class Api::V1::UsersController < ApplicationController
     @user ||= User.find(params[:id])
   end
 
-  def email_taken
-    !User.find_by_email(user_params[:email]).nil?
+  def user_by_email
+    User.find_by_email(user_params[:email])
   end
 end
