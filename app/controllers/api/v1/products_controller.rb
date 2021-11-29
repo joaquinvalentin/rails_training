@@ -47,7 +47,11 @@ class Api::V1::ProductsController < ApplicationController
   private
 
   def user_not_authorized(exception)
-    render_error(4204, exception.message)
+    if exception.query == 'update?' || exception.query == 'destroy?'
+      render_error(4203, exception.message)
+    else
+      render_error(4204, exception.message)
+    end
   end
 
   def product_params
