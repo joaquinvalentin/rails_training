@@ -56,11 +56,11 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(response).to have_http_status(:forbidden)
       end
 
-      it 'returns the error code 4204' do
+      it 'returns the error code 4205' do
         id = user.products.first.id
         authenticate_user(admin)
         make_request(id)
-        expect(JSON.parse(response.body)['error_code']).to be(4204)
+        expect(JSON.parse(response.body)['error_code']).to be(4205)
       end
 
       it 'returns an error message' do
@@ -69,48 +69,96 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         make_request(id)
         error_message = 'Cannot perform this action over product due to unauthorized request'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
+    end
+
+    context 'when the user is not logged' do
+      def do_call
+        id = user.products.first.id
+        request.headers['Authorization'] = 'Bearer sdklhjflasgd'
+        make_request(id)
+      end
+
+      it 'return unauthorized' do
+        do_call
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the error message ' do
+        do_call
+        error_message = 'Cannot perform this action over product due to unauthenticated request'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
+
+      it 'returns the error code 4107' do
+        do_call
+        expect(JSON.parse(response.body)['error_code']).to be(4204)
       end
     end
   end
 
   describe 'GET #index' do
-    def make_request
-      get :index
-    end
-
     context 'when is successful' do
-      it 'return successful' do
+      def make_request
         authenticate_user(user)
+        get :index
+      end
+
+      it 'return successful' do
         make_request
         expect(response).to have_http_status(:success)
       end
 
       it 'returns the list of products' do
-        authenticate_user(user)
-        title = user.products.first.title
         make_request
+        title = user.products.first.title
         expect(JSON.parse(response.body).first['title']).to eql(title)
       end
     end
 
     context 'when the user does not have permissions' do
-      it 'returns forbidden' do
+      def make_request
         authenticate_user(admin)
+        get :index
+      end
+
+      it 'returns forbidden' do
         make_request
         expect(response).to have_http_status(:forbidden)
       end
 
-      it 'returns the error code 4204' do
-        authenticate_user(admin)
+      it 'returns the error code 4205' do
         make_request
-        expect(JSON.parse(response.body)['error_code']).to be(4204)
+        expect(JSON.parse(response.body)['error_code']).to be(4205)
       end
 
       it 'returns an error message' do
-        authenticate_user(admin)
         make_request
         error_message = 'Cannot perform this action over product due to unauthorized request'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
+    end
+
+    context 'when the user is not logged' do
+      def make_request
+        request.headers['Authorization'] = 'Bearer sdklhjflasgd'
+        get :index
+      end
+
+      it 'return unauthorized' do
+        make_request
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the error message ' do
+        make_request
+        error_message = 'Cannot perform this action over product due to unauthenticated request'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
+
+      it 'returns the error code 4107' do
+        make_request
+        expect(JSON.parse(response.body)['error_code']).to be(4204)
       end
     end
   end
@@ -142,6 +190,29 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       it 'returns the error code 4200' do
         make_request({ product: { title: '', price: 10 } })
         expect(JSON.parse(response.body)['error_code']).to be(4200)
+      end
+    end
+
+    context 'when the user is not logged' do
+      def make_call
+        request.headers['Authorization'] = 'Bearer sdklhjflasgd'
+        post :create, params: { product: { title: 'New Product', price: 10 } }
+      end
+
+      it 'return unauthorized' do
+        make_call
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the error message ' do
+        make_call
+        error_message = 'Cannot perform this action over product due to unauthenticated request'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
+
+      it 'returns the error code 4107' do
+        make_call
+        expect(JSON.parse(response.body)['error_code']).to be(4204)
       end
     end
   end
@@ -204,6 +275,29 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(JSON.parse(response.body)['error_code']).to be(4203)
       end
     end
+
+    context 'when the user is not logged' do
+      def make_call
+        request.headers['Authorization'] = 'Bearer sdklhjflasgd'
+        put :update, params: { id: 1, product: { title: 'New Product', price: 10 } }
+      end
+
+      it 'return unauthorized' do
+        make_call
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the error message ' do
+        make_call
+        error_message = 'Cannot perform this action over product due to unauthenticated request'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
+
+      it 'returns the error code 4107' do
+        make_call
+        expect(JSON.parse(response.body)['error_code']).to be(4204)
+      end
+    end
   end
 
   describe 'DELETE #destroy' do
@@ -263,6 +357,29 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       it 'returns the error code 4203' do
         make_request
         expect(JSON.parse(response.body)['error_code']).to be(4203)
+      end
+    end
+
+    context 'when the user is not logged' do
+      def make_request
+        request.headers['Authorization'] = 'Bearer sdklhjflasgd'
+        delete :destroy, params: { id: 0 }
+      end
+
+      it 'return unauthorized' do
+        make_request
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the error message ' do
+        make_request
+        error_message = 'Cannot perform this action over product due to unauthenticated request'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
+
+      it 'returns the error code 4107' do
+        make_request
+        expect(JSON.parse(response.body)['error_code']).to be(4204)
       end
     end
   end
