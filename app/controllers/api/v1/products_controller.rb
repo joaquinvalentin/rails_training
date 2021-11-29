@@ -4,7 +4,6 @@ class Api::V1::ProductsController < ApplicationController
   include Authenticable
 
   before_action :check_login
-  before_action :check_owner, only: %I[update destroy]
 
   def index
     products = policy_scope(Product)
