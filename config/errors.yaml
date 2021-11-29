@@ -1,42 +1,67 @@
 # frozen_string_literal: true
 
+# Generic errors
 5000:
   :http_status: 500
   :error_code: 5000
   :description: 'Internal server error'
-4000:
-  :http_status: 404
-  :error_code: 4000
-  :description: 'Not found'
 4001:
   :http_status: 400
   :error_code: 4001
   :description: 'Missing Parameter'
-4010:
+4002:
+  :http_status: 401
+  :error_code: 4002
+  :description: 'Cannot perform this action due to unauthenticated request'
+4003:
+  :http_status: 401
+  :error_code: 4003
+  :description: 'Cannot authenticate user due to invalid credentials'
+
+# User errors
+4100:
   :http_status: 404
-  :error_code: 4010
+  :error_code: 4100
+  :description: 'User not found'
+4102:
+  :http_status: 404
+  :error_code: 4102
   :description: 'User can not be deleted or updated due to user not found'
-4011:
+4103:
   :http_status: 401
-  :error_code: 4011
-  :description: 'User can not be deleted or updated due to unauthorized'
-4022:
-  :http_status: 422
-  :error_code: 4022
-  :description: 'Cannot create profile due to invalid paramater'
-4023:
-  :http_status: 422
-  :error_code: 4023
-  :description: 'Cannot update profile due to invalid paramater'
-4130:
-  :http_status: 400
-  :error_code: 4130
-  :description: 'Invalid parameter in product'
+  :error_code: 4103
+  :description: 'User can not be deleted or updated due to unauthorized request'
 4104:
-  :http_status: 404
+  :http_status: 422
   :error_code: 4104
-  :description: 'Product not found'
-4111:
+  :description: 'Cannot create user due to invalid parameters'
+4105:
+  :http_status: 422
+  :error_code: 4105
+  :description: 'Cannot update user profile to invalid paramater'
+4107:
   :http_status: 401
-  :error_code: 4111
-  :description: 'Product can not be deleted or updated due to being unauthorized'
+  :error_code: 4107
+  :description: 'Cannot perform this action over user due to unauthenticated request'
+
+# Product errors  
+4200:
+  :http_status: 400
+  :error_code: 4200
+  :description: 'Product can not be created due to bad request'
+4201:
+  :http_status: 400
+  :error_code: 4201
+  :description: 'Product can not be updated due to bad request'
+4202:
+  :http_status: 404
+  :error_code: 4202
+  :description: 'Product not found'
+4203:
+  :http_status: 401
+  :error_code: 4203
+  :description: 'Product can not be deleted or updated due to unauthorized request'
+4204:
+  :http_status: 403
+  :error_code: 4204
+  :description: 'Cannot perform this action over product due to unauthenticated request'

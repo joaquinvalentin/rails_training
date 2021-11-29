@@ -42,9 +42,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(JSON.parse(response.body)['details']).to eql("Couldn't find User with 'id'=0")
       end
 
-      it 'returns the error code 4000' do
+      it 'returns the error code 4100' do
         make_request(0)
-        expect(JSON.parse(response.body)['error_code']).to be(4000)
+        expect(JSON.parse(response.body)['error_code']).to be(4100)
       end
     end
   end
@@ -71,9 +71,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when is not successful' do
       let(:new_user) { { email: 'test.org', password: '123456' } }
 
-      it 'returns the error code 4022' do
+      it 'returns the error code 4104' do
         create_call(new_user)
-        expect(JSON.parse(response.body)['error_code']).to be(4022)
+        expect(JSON.parse(response.body)['error_code']).to be(4104)
       end
 
       it 'returns code 422' do
@@ -125,9 +125,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
-      it 'returns the error code 4023' do
+      it 'returns the error code 4105' do
         update_user_call(authenticated_user)
-        expect(JSON.parse(response.body)['error_code']).to be(4023)
+        expect(JSON.parse(response.body)['error_code']).to be(4105)
       end
     end
 
@@ -146,16 +146,16 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(response).to have_http_status(:unauthorized)
       end
 
-      it 'returns the error code 4011' do
+      it 'returns the error code 4107' do
         request.headers['Authorization'] = 'Bearer sdklhjflasgd'
         update_user_call(user)
-        expect(JSON.parse(response.body)['error_code']).to be(4011)
+        expect(JSON.parse(response.body)['error_code']).to be(4107)
       end
 
       it 'returns the error message' do
         request.headers['Authorization'] = 'Bearer sdklhjflasgd'
         update_user_call(user)
-        error_message = 'User can not be deleted or updated due to unauthorized'
+        error_message = 'Cannot perform this action over user due to unauthenticated request'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
     end
@@ -184,16 +184,16 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(response).to have_http_status(:unauthorized)
       end
 
-      it 'returns the error code 4011' do
+      it 'returns the error code 4103' do
         authenticated_user
         delete_user_call(user)
-        expect(JSON.parse(response.body)['error_code']).to be(4011)
+        expect(JSON.parse(response.body)['error_code']).to be(4103)
       end
 
       it 'returns the error message' do
         authenticated_user
         delete_user_call(user)
-        error_message = 'User can not be deleted or updated due to unauthorized'
+        error_message = 'User can not be deleted or updated due to unauthorized request'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
     end
@@ -205,10 +205,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(response).to have_http_status(:unauthorized)
       end
 
-      it 'returns the error code 4011' do
+      it 'returns the error code 4107' do
         request.headers['Authorization'] = nil
         delete_user_call(user)
-        expect(JSON.parse(response.body)['error_code']).to be(4011)
+        expect(JSON.parse(response.body)['error_code']).to be(4107)
       end
     end
 
@@ -219,16 +219,16 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(response).to have_http_status(:unauthorized)
       end
 
-      it 'returns the error code 4010' do
+      it 'returns the error code 4107' do
         request.headers['Authorization'] = 'Bearer sdklhjflasgd'
         delete_user_call(user)
-        expect(JSON.parse(response.body)['error_code']).to be(4011)
+        expect(JSON.parse(response.body)['error_code']).to be(4107)
       end
 
       it 'returns the error message' do
         request.headers['Authorization'] = 'Bearer sdklhjflasgd'
         delete_user_call(user)
-        error_message = 'User can not be deleted or updated due to unauthorized'
+        error_message = 'Cannot perform this action over user due to unauthenticated request'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
     end

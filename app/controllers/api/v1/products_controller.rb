@@ -19,7 +19,7 @@ class Api::V1::ProductsController < ApplicationController
     if product.save
       render json: ProductSerializer.render(product), status: :created
     else
-      render_error(4130, product.errors.messages[:error])
+      render_error(4200, product.errors.messages[:error])
     end
   end
 
@@ -27,7 +27,7 @@ class Api::V1::ProductsController < ApplicationController
     if product.update(product_params)
         render json: ProductSerializer.render(product)
       else
-        render_error(4130, product.errors.messages[:error])
+        render_error(4201, product.errors.messages[:error])
       end
   end
 
@@ -37,7 +37,7 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
-    render_error(4104, exception.message)
+    render_error(4202, exception.message)
   end
 
   private
@@ -47,10 +47,14 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def check_owner
-    render_error(4111) unless product.user_id == current_user&.id
+    render_error(4203) unless product.user_id == current_user&.id
   end
 
   def product
     @product ||= Product.find(params[:id])
+  end
+
+  def check_login
+    render_error(4204) unless current_user
   end
 end

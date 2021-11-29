@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::UsersController < ApplicationController
-  before_action :check_permissions, only: %i[update destroy]
+  before_action :check_owner, only: %i[update destroy]
 
   # GET /users/1
   def show
@@ -14,7 +14,7 @@ class Api::V1::UsersController < ApplicationController
     if user.save
       render json: UserSerializer.render(user), status: :created
     else
-      render_error(4022, user.errors.messages[:error])
+      render_error(4104, user.errors.messages[:error])
     end
   end
 
@@ -23,7 +23,7 @@ class Api::V1::UsersController < ApplicationController
     if user.update(user_params)
       render json: UserSerializer.render(user), status: :ok
     else
-      render_error(4023, user.errors.messages[:error])
+      render_error(4105, user.errors.messages[:error])
     end
   end
 
@@ -35,17 +35,11 @@ class Api::V1::UsersController < ApplicationController
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
     # TODO: Add error message
-    # If current_user raise this exception for delete or update, it means that the user is not logged in
-    # (and therefore not authorized to access this resource)
-    if request.delete? || request.put?
-      render_error(4010, exception.message)
-    else
-      render_error(4000, exception.message)
-    end
+    render_error(4100, exception.message)
   end
 
   rescue_from AuthenticationError do
-    render_error(4011)
+    render_error(4107)
   end
 
   private
@@ -59,7 +53,15 @@ class Api::V1::UsersController < ApplicationController
     @user ||= User.find(params[:id])
   end
 
-  def check_permissions
-    render_error(4011) unless current_user&.admin? || current_user&.id == user.id
+  def check_owner
+    if current_user
+      render_error(4103) unless user.id == current_user&.id
+    else
+      render_error(4107)
+    end
+  end
+
+  def check_login
+    render_error(4107) unless current_user
   end
 end

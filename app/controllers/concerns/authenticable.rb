@@ -17,10 +17,4 @@ module Authenticable
 
   class AuthenticationError < StandardError
   end
-
-  protected
-
-  def check_login
-    render_error(4111) unless current_user
-  end
 end

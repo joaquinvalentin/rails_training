@@ -35,9 +35,9 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(JSON.parse(response.body)['details']).to eql("Couldn't find Product with 'id'=0")
       end
 
-      it 'returns the error code 4104' do
+      it 'returns the error code 4202' do
         make_request(0)
-        expect(JSON.parse(response.body)['error_code']).to be(4104)
+        expect(JSON.parse(response.body)['error_code']).to be(4202)
       end
     end
   end
@@ -77,7 +77,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
     context 'when is not successful' do
       it 'returns the error message' do
         make_request({ product: { title: '', price: 10 } })
-        expect(JSON.parse(response.body)['description']).to eql('Invalid parameter in product')
+        expect(JSON.parse(response.body)['description']).to eql('Product can not be created due to bad request')
       end
 
       it 'returns bad request' do
@@ -85,9 +85,9 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(response).to have_http_status(:bad_request)
       end
 
-      it 'returns the error code 4130' do
+      it 'returns the error code 4200' do
         make_request({ product: { title: '', price: 10 } })
-        expect(JSON.parse(response.body)['error_code']).to be(4130)
+        expect(JSON.parse(response.body)['error_code']).to be(4200)
       end
     end
   end
@@ -113,7 +113,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
       it 'returns the error message' do
         make_request
-        expect(JSON.parse(response.body)['description']).to eql('Invalid parameter in product')
+        expect(JSON.parse(response.body)['description']).to eql('Product can not be updated due to bad request')
       end
 
       it 'returns bad request' do
@@ -121,9 +121,9 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(response).to have_http_status(:bad_request)
       end
 
-      it 'returns the error code 4130' do
+      it 'returns the error code 4201' do
         make_request
-        expect(JSON.parse(response.body)['error_code']).to be(4130)
+        expect(JSON.parse(response.body)['error_code']).to be(4201)
       end
     end
 
@@ -137,7 +137,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
       it 'returns the error message' do
         make_request
-        message_expected = 'Product can not be deleted or updated due to being unauthorized'
+        message_expected = 'Product can not be deleted or updated due to unauthorized request'
         expect(JSON.parse(response.body)['description']).to eql(message_expected)
       end
 
@@ -146,9 +146,9 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(response).to have_http_status(:unauthorized)
       end
 
-      it 'returns the error code 4111' do
+      it 'returns the error code 4203' do
         make_request
-        expect(JSON.parse(response.body)['error_code']).to be(4111)
+        expect(JSON.parse(response.body)['error_code']).to be(4203)
       end
     end
   end
@@ -182,9 +182,9 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(JSON.parse(response.body)['details']).to eql("Couldn't find Product with 'id'=0")
       end
 
-      it 'returns the error code 4104' do
+      it 'returns the error code 4202' do
         make_request
-        expect(JSON.parse(response.body)['error_code']).to be(4104)
+        expect(JSON.parse(response.body)['error_code']).to be(4202)
       end
     end
 
@@ -198,7 +198,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
       it 'returns the error message' do
         make_request
-        message_expected = 'Product can not be deleted or updated due to being unauthorized'
+        message_expected = 'Product can not be deleted or updated due to unauthorized request'
         expect(JSON.parse(response.body)['description']).to eql(message_expected)
       end
 
@@ -207,9 +207,9 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(response).to have_http_status(:unauthorized)
       end
 
-      it 'returns the error code 4111' do
+      it 'returns the error code 4203' do
         make_request
-        expect(JSON.parse(response.body)['error_code']).to be(4111)
+        expect(JSON.parse(response.body)['error_code']).to be(4203)
       end
     end
   end
