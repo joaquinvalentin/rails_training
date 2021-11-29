@@ -4,6 +4,7 @@ class Api::V1::ProductsController < ApplicationController
   include Authenticable
 
   before_action :check_login
+  before_action :check_permissions, only: %I[show update destroy]
 
   def index
     products = policy_scope(Product)
@@ -16,9 +17,8 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def create
-    return render_error(4111) if current_user.admin?
-
     product = current_user.products.build(product_params)
+    authorize product
 
     return render json: ProductSerializer.render(product), status: :created if product.save
 
@@ -26,14 +26,12 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def update
-    authorize product
     return render json: ProductSerializer.render(product) if product.update(product_params)
 
     render_error(4201, product.errors.messages[:error])
   end
 
   def destroy
-    authorize product
     product.destroy
     head :no_content
   end
@@ -60,15 +58,15 @@ class Api::V1::ProductsController < ApplicationController
     params.require(:product).permit(:title, :price, :published)
   end
 
-  def check_owner
-    render_error(4203) unless product.user_id == current_user&.id
-  end
-
   def product
     @product ||= Product.find(params[:id])
   end
 
   def check_login
     render_error(4204) unless current_user
+  end
+
+  def check_permissions
+    authorize product
   end
 end
