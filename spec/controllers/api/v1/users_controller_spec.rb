@@ -4,25 +4,17 @@ require 'rails_helper'
 require 'json'
 
 RSpec.describe Api::V1::UsersController, type: :controller do
-  def user
-    @user ||= create(:user)
-  end
-
-  def authenticated_user
-    @authenticated_user ||= create_authenticated_user
-  end
-
-  def admin
-    @admin ||= create(:user, :is_admin)
-  end
-
-  def authenticated_admin
-    @authenticated_admin ||= create_authenticated_admin
-  end
-
   describe 'GET #show' do
     def make_request(user)
       get :show, params: { id: user.id }
+    end
+
+    def authenticated_admin
+      @authenticated_admin ||= create_authenticated_admin
+    end
+
+    def user
+      @user ||= create(:user)
     end
 
     context 'when the user is admin and was authenticated' do
@@ -58,22 +50,24 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
 
     context 'when the user is logged but is not admin' do
-      it 'return forbidden' do
+      def call_from_non_admin_user
         authenticate_user(user)
         make_request(user)
+      end
+
+      it 'return forbidden' do
+        call_from_non_admin_user
         expect(response).to have_http_status(:forbidden)
       end
 
       it 'returns the error message ' do
-        authenticate_user(user)
-        make_request(user)
+        call_from_non_admin_user
         error_message = 'User cannot perform this action due to unauthorized request'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
 
       it 'returns the error code 4103' do
-        authenticate_user(user)
-        make_request(user)
+        call_from_non_admin_user
         expect(JSON.parse(response.body)['error_code']).to be(4103)
       end
     end
@@ -107,18 +101,29 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       post :create, params: { user: user_params }
     end
 
+    def call_from_admin
+      authenticate_user(admin)
+      create_call(new_user)
+    end
+
+    def admin
+      @admin ||= create(:user, :is_admin)
+    end
+
+    def user
+      @user ||= create(:user)
+    end
+
     context 'when the user is admin and was authenticated' do
       let(:new_user) { { email: 'test@test.org', password: '123456' } }
 
       it 'returns successful' do
-        authenticate_user(admin)
-        create_call(new_user)
+        call_from_admin
         expect(response).to have_http_status(:created)
       end
 
       it 'returns the user' do
-        authenticate_user(admin)
-        create_call(new_user)
+        call_from_admin
         expect(JSON.parse(response.body)['email']).to eql(new_user[:email])
       end
     end
@@ -126,21 +131,23 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when the user is not admin' do
       let(:new_user) { { email: 'test@test.org', password: '123456' } }
 
-      it 'returns forbidden' do
+      def call_from_non_admin_user
         authenticate_user(user)
         create_call(new_user)
+      end
+
+      it 'returns forbidden' do
+        call_from_non_admin_user
         expect(response).to have_http_status(:forbidden)
       end
 
       it 'returns the error code 4103' do
-        authenticate_user(user)
-        create_call(new_user)
+        call_from_non_admin_user
         expect(JSON.parse(response.body)['error_code']).to be(4103)
       end
 
       it 'returns the error message' do
-        authenticate_user(user)
-        create_call(new_user)
+        call_from_non_admin_user
         error_message = 'User cannot perform this action due to unauthorized request'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
@@ -150,20 +157,17 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       let(:new_user) { { email: 'test.org', password: '123456' } }
 
       it 'returns the error code 4104' do
-        authenticate_user(admin)
-        create_call(new_user)
+        call_from_admin
         expect(JSON.parse(response.body)['error_code']).to be(4104)
       end
 
       it 'returns code 422' do
-        authenticate_user(admin)
-        create_call(new_user)
+        call_from_admin
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'returns a error' do
-        authenticate_user(admin)
-        create_call(new_user)
+        call_from_admin
         expect(JSON.parse(response.body)['details']).to eql(['is not an email'])
       end
     end
@@ -172,20 +176,17 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       let(:new_user) { { email: user.email, password: '123456' } }
 
       it 'returns the error code 4106' do
-        authenticate_user(admin)
-        create_call(new_user)
+        call_from_admin
         expect(JSON.parse(response.body)['error_code']).to be(4106)
       end
 
       it 'returns code 422' do
-        authenticate_user(admin)
-        create_call(new_user)
+        call_from_admin
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'returns a error' do
-        authenticate_user(admin)
-        create_call(new_user)
+        call_from_admin
         expect(JSON.parse(response.body)['description']).to eql('The email is already in use')
       end
     end
@@ -198,6 +199,18 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     def update_user_call(user)
       put :update, params: { id: user.id, user: user_params }
+    end
+
+    def authenticated_admin
+      @authenticated_admin ||= create_authenticated_admin
+    end
+
+    def authenticated_user
+      @authenticated_user ||= create_authenticated_user
+    end
+
+    def user
+      @user ||= create(:user)
     end
 
     context 'when the user is admin and was authenticated' do
@@ -261,23 +274,20 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
 
     context 'when the email was taken by other user' do
-      let(:user_params) { { email: user.email, password: admin.password } }
+      let(:user_params) { { email: user.email, password: authenticated_admin.password } }
 
       it 'returns the error code 4106' do
-        authenticate_user(admin)
-        update_user_call(admin)
+        update_user_call(authenticated_admin)
         expect(JSON.parse(response.body)['error_code']).to be(4106)
       end
 
       it 'returns code 422' do
-        authenticate_user(admin)
-        update_user_call(admin)
+        update_user_call(authenticated_admin)
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'returns a error' do
-        authenticate_user(admin)
-        update_user_call(admin)
+        update_user_call(authenticated_admin)
         expect(JSON.parse(response.body)['description']).to eql('The email is already in use')
       end
     end
@@ -306,36 +316,49 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       delete :destroy, params: { id: user_to_destroy.id }
     end
 
+    def user
+      @user ||= create(:user)
+    end
+
+    def admin
+      @admin ||= create(:user, :is_admin)
+    end
+
+    def call_from_admin
+      authenticate_user(admin)
+      delete_user_call(user)
+    end
+
+    def call_from_non_admin_user
+      authenticate_user(user)
+      delete_user_call(user)
+    end
+
     context 'when the user is admin and was authenticated' do
       it 'returns no content' do
-        authenticate_user(admin)
-        delete_user_call(user)
+        call_from_admin
         expect(response).to have_http_status(:no_content)
       end
 
       it 'destroy the user' do
-        authenticate_user(admin)
-        delete_user_call(user)
+        call_from_admin
         expect(User.find_by(id: user.id).nil?).to be(true)
       end
     end
 
     context 'when the user is not admin' do
       it 'returns forbidden' do
-        authenticate_user(user)
-        delete_user_call(user)
+        call_from_non_admin_user
         expect(response).to have_http_status(:forbidden)
       end
 
       it 'returns the error code 4103' do
-        authenticate_user(user)
-        delete_user_call(user)
+        call_from_non_admin_user
         expect(JSON.parse(response.body)['error_code']).to be(4103)
       end
 
       it 'returns the error message' do
-        authenticate_user(user)
-        delete_user_call(user)
+        call_from_non_admin_user
         error_message = 'User cannot perform this action due to unauthorized request'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
