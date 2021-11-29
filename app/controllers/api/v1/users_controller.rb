@@ -67,4 +67,8 @@ class Api::V1::UsersController < ApplicationController
   def check_permissions
     authorize user
   end
+
+  def check_login
+    render_error(4107) unless current_user
+  end
 end

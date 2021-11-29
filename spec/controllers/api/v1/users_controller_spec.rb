@@ -39,13 +39,13 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       it 'returns the error message ' do
         make_request(user)
-        error_message = 'Cannot perform this action due to unauthenticated request'
+        error_message = 'Cannot perform this action over user due to unauthenticated request'
         expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
 
-      it 'returns the error code 4002' do
+      it 'returns the error code 4107' do
         make_request(user)
-        expect(JSON.parse(response.body)['error_code']).to be(4002)
+        expect(JSON.parse(response.body)['error_code']).to be(4107)
       end
     end
 
