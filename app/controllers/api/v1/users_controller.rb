@@ -2,10 +2,10 @@
 
 class Api::V1::UsersController < ApplicationController
   before_action :check_login
+  before_action :check_permissions, only: %I[show update destroy]
 
   # GET /users/1
   def show
-    authorize user
     render json: UserSerializer.render(user)
   end
 
@@ -22,7 +22,6 @@ class Api::V1::UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
-    authorize user
     return render_error(4106) if user_by_email
 
     return render json: UserSerializer.render(user), status: :ok if user.update(user_params)
@@ -32,7 +31,6 @@ class Api::V1::UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    authorize user
     user.destroy
     head :no_content
   end
@@ -64,5 +62,10 @@ class Api::V1::UsersController < ApplicationController
 
   def user_by_email
     User.find_by_email(user_params[:email])
+  end
+
+  def check_permissions
+    
+    authorize user
   end
 end
