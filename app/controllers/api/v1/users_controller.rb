@@ -65,7 +65,6 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def check_permissions
-    
     authorize user
   end
 end
