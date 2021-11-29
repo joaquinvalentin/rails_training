@@ -47,14 +47,14 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def check_owner
-    if current_user
-      render_error(4203) unless product.user_id == current_user&.id
-    else
-      render_error(4002)
-    end
+    render_error(4203) unless product.user_id == current_user&.id
   end
 
   def product
     @product ||= Product.find(params[:id])
+  end
+
+  def check_login
+    render_error(4204) unless current_user
   end
 end

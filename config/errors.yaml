@@ -16,7 +16,7 @@
 4003:
   :http_status: 401
   :error_code: 4003
-  :description: 'Invalid credentials'
+  :description: 'Cannot authenticate user due to invalid credentials'
 
 # User errors
 4100:
@@ -34,11 +34,15 @@
 4104:
   :http_status: 422
   :error_code: 4104
-  :description: 'Cannot create profile due to invalid parameters'
+  :description: 'Cannot create user due to invalid parameters'
 4105:
   :http_status: 422
   :error_code: 4105
-  :description: 'Cannot update profile due to invalid paramater'
+  :description: 'Cannot update user profile to invalid paramater'
+4107:
+  :http_status: 401
+  :error_code: 4107
+  :description: 'Cannot perform this action over user due to unauthenticated request'
 
 # Product errors  
 4200:
@@ -57,3 +61,7 @@
   :http_status: 401
   :error_code: 4203
   :description: 'Product can not be deleted or updated due to unauthorized request'
+4204:
+  :http_status: 403
+  :error_code: 4204
+  :description: 'Cannot perform this action over product due to unauthenticated request'

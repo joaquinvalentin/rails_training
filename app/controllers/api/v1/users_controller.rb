@@ -39,7 +39,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   rescue_from AuthenticationError do
-    render_error(4002)
+    render_error(4107)
   end
 
   private
@@ -57,7 +57,11 @@ class Api::V1::UsersController < ApplicationController
     if current_user
       render_error(4103) unless user.id == current_user&.id
     else
-      render_error(4002)
+      render_error(4107)
     end
+  end
+
+  def check_login
+    render_error(4107) unless current_user
   end
 end
