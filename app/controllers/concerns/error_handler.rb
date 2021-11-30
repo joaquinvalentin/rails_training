@@ -6,7 +6,4 @@ module ErrorHandler
       Error.instance.error_for(error_code, details)
     ), status: Error.instance.http_status_for(error_code)
   end
-
-  class AuthenticationError < StandardError
-  end
 end
