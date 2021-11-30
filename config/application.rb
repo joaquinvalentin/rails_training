@@ -14,7 +14,7 @@ require 'action_mailbox/engine'
 require 'action_text/engine'
 require 'action_view/railtie'
 require 'action_cable/engine'
-# require "sprockets/railtie"
+require 'sprockets/railtie'
 require 'rails/test_unit/railtie'
 
 # Require the gems listed in Gemfile, including any gems
@@ -49,5 +49,11 @@ module Training
         config.swagger_dry_run = false
       end
     end
+
+    # To add a CMS with API-Only mode
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
+    config.middleware.use Rack::MethodOverride
+    config.middleware.use ActionDispatch::Flash
   end
 end
