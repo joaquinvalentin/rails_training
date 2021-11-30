@@ -90,3 +90,7 @@ gem 'rswag-api', '~> 2.4.0'
 gem 'rswag-ui', '~> 2.4.0'
 
 gem 'pundit', '~> 2.1.1'
+
+gem 'activeadmin', '~> 2.9.0'
+
+gem 'sass-rails', '~> 6.0.0'
