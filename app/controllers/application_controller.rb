@@ -13,21 +13,17 @@ class ApplicationController < ActionController::Base
       current_user
     else
       flash[:alert] = 'Unauthorized Access!'
-      request.headers['Authorization'] = nil
-      redirect_to '/'
+      redirect_to '/admin/logout'
     end
   end
 
   def destroy_admin_user_session_path
-    request.headers['Authorization'] = nil
-    '/'
+    '/admin/logout'
   end
 
+  private
+
   def user
-    if current_user.nil?
-      authenticate_user!
-    else
-      current_user
-    end
+    authenticate_user!
   end
 end
