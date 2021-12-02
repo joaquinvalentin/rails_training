@@ -15,6 +15,12 @@ admin = User.create!(
 )
 puts "Created a new admin: #{admin.email}"
 
+user = User.create!(
+  email: 'mail@example.com', password: 'password'
+)
+user_ids << user.id
+puts "Created a new user: #{user.email}"
+
 5.times do
   user = User.create!(
     email: Faker::Internet.email, password: Faker::Internet.password
@@ -23,7 +29,7 @@ puts "Created a new admin: #{admin.email}"
   puts "Created a new user: #{user.email}"
 end
 
-5.times do
+6.times do
   product = Product.create!(
     title: Faker::Commerce.product_name,
     price: Faker::Commerce.price,
