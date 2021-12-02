@@ -2,7 +2,7 @@
 
 class Api::V1::TokensController < ApplicationController
   def create
-    authenticated = user&.authenticate(user_params[:password])
+    authenticated = user&.valid_password?(user_params[:password])
     return render_error(4003) unless authenticated
 
     render json: {
