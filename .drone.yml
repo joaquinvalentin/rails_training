@@ -4,9 +4,12 @@ name: training-api-drone
 
 environment:
   DATABASE_URL_TESTING: postgres://testuser:password123@postgres-service/training_test
+  DATABASE_URL: NA
   BUNDLE_PATH: /drone-pipeline/${DRONE_REPO}/ruby/bundle/vendor
   BUNDLE_CACHE_PATH: /drone-pipeline/${DRONE_REPO}/ruby/bundle/cache
-  
+  DATABASE_PASSWORD: NA
+  DATABASE_USER: NA
+
 
 steps:
 - name: bundler setup
