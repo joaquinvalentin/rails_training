@@ -48,7 +48,7 @@ module Training
 
     # Database variables for development
     # config.database_name = ENV.fetch('DATABASE_NAME')
-    # config.database_user = ENV.fetch('DATABASE_USER')
+    config.database_user = ENV.fetch('DATABASE_USER')
     config.database_password = ENV.fetch('DATABASE_PASSWORD')
     config.database_url = ENV.fetch('DATABASE_URL')
 
