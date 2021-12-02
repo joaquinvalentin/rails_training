@@ -39,10 +39,6 @@ class Api::V1::UsersController < ApplicationController
     render_error(4100, exception.message)
   end
 
-  rescue_from AuthenticationError do
-    render_error(4107)
-  end
-
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   private
