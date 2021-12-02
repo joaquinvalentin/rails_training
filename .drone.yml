@@ -34,6 +34,8 @@ steps:
   image: ruby:3.0.2
   commands:
     - bundle exec rubocop
+  depends_on:
+    - bundler setup
 
 services: 
 - name: postgres-service
