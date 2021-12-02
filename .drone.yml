@@ -1,0 +1,48 @@
+kind: pipeline
+type: docker
+name: training-api-drone
+
+environment:
+  DATABASE_URL_TESTING: postgres://testuser:password123@postgres-service/training_test
+  DATABASE_URL: NA
+  BUNDLE_PATH: /drone-pipeline/${DRONE_REPO}/ruby/bundle/vendor
+  BUNDLE_CACHE_PATH: /drone-pipeline/${DRONE_REPO}/ruby/bundle/cache
+  DATABASE_PASSWORD: NA
+  DATABASE_USER: NA
+
+
+steps:
+- name: bundler setup
+  image: ruby:3.0.2
+  commands:
+    - bundle install
+
+- name: database setup
+  image: ruby:3.0.2
+  environment:
+    RAILS_ENV: test
+  commands: 
+    - bundle exec rake db:create db:migrate --trace
+  depends_on:
+    - bundler setup
+
+- name: Run tests
+  image: ruby:3.0.2
+  commands:
+    - bundle exec rspec --format progress
+  depends_on:
+    - database setup
+
+- name: Run linter
+  image: ruby:3.0.2
+  commands:
+    - bundle exec rubocop
+  depends_on:
+    - bundler setup
+
+services: 
+- name: postgres-service
+  image: postgres:13.4
+  environment:
+    POSTGRES_USER: testuser
+    POSTGRES_PASSWORD: password123
