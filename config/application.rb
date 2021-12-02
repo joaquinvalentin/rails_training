@@ -41,16 +41,16 @@ module Training
     config.api_only = true
 
     # Database variables for testing
-    config.database_name_testing = ENV.fetch('DATABASE_NAME_TESTING')
-    config.database_user_testing = ENV.fetch('DATABASE_USER_TESTING')
-    config.database_password_testing = ENV.fetch('DATABASE_PASSWORD_TESTING')
+    #config.database_name_testing = ENV.fetch('DATABASE_NAME_TESTING')
+    #config.database_user_testing = ENV.fetch('DATABASE_USER_TESTING')
+    #config.database_password_testing = ENV.fetch('DATABASE_PASSWORD_TESTING')
     config.database_url_testing = ENV.fetch('DATABASE_URL_TESTING')
 
     # Database variables for development
-    config.database_name = ENV.fetch('DATABASE_NAME')
-    config.database_user = ENV.fetch('DATABASE_USER')
-    config.database_password = ENV.fetch('DATABASE_PASSWORD')
-    config.database_url = ENV.fetch('DATABASE_URL')
+    # config.database_name = ENV.fetch('DATABASE_NAME')
+    # config.database_user = ENV.fetch('DATABASE_USER')
+    # config.database_password = ENV.fetch('DATABASE_PASSWORD')
+    # config.database_url = ENV.fetch('DATABASE_URL')
 
     # Autoload lib folder
     config.eager_load_paths << Rails.root.join('lib')

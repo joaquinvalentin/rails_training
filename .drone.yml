@@ -3,7 +3,7 @@ type: docker
 name: training-api-drone
 
 environment:
-  DATABASE_NAME_TESTING: postgres://testuser:password123@postgres-service/training_test
+  DATABASE_URL_TESTING: postgres://testuser:password123@postgres-service/training_test
   BUNDLE_PATH: /drone-pipeline/${DRONE_REPO}/ruby/bundle/vendor
   BUNDLE_CACHE_PATH: /drone-pipeline/${DRONE_REPO}/ruby/bundle/cache
   
