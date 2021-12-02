@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class Api::V1::UsersController < ApplicationController
-  before_action :check_owner, only: %i[update destroy]
+  before_action :check_login
+  before_action :check_permissions, only: %I[show update destroy]
 
   # GET /users/1
   def show
@@ -11,20 +12,21 @@ class Api::V1::UsersController < ApplicationController
   # POST /users
   def create
     user = User.new(user_params)
-    if user.save
-      render json: UserSerializer.render(user), status: :created
-    else
-      render_error(4104, user.errors.messages[:error])
-    end
+    authorize user
+    return render_error(4106) if user_by_email
+
+    return render json: UserSerializer.render(user), status: :created if user.save
+
+    render_error(4104, user.errors.messages[:error])
   end
 
   # PATCH/PUT /users/1
   def update
-    if user.update(user_params)
-      render json: UserSerializer.render(user), status: :ok
-    else
-      render_error(4105, user.errors.messages[:error])
-    end
+    return render_error(4106) if user_by_email
+
+    return render json: UserSerializer.render(user), status: :ok if user.update(user_params)
+
+    render_error(4105, user.errors.messages[:error])
   end
 
   # DELETE /users/1
@@ -34,7 +36,6 @@ class Api::V1::UsersController < ApplicationController
   end
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
-    # TODO: Add error message
     render_error(4100, exception.message)
   end
 
@@ -42,7 +43,13 @@ class Api::V1::UsersController < ApplicationController
     render_error(4107)
   end
 
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
   private
+
+  def user_not_authorized(exception)
+    render_error(4103, exception.message)
+  end
 
   # Only allow a trusted parameter "white list" through.
   def user_params
@@ -53,12 +60,12 @@ class Api::V1::UsersController < ApplicationController
     @user ||= User.find(params[:id])
   end
 
-  def check_owner
-    if current_user
-      render_error(4103) unless user.id == current_user&.id
-    else
-      render_error(4107)
-    end
+  def user_by_email
+    User.find_by_email(user_params[:email])
+  end
+
+  def check_permissions
+    authorize user
   end
 
   def check_login

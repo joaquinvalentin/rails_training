@@ -28,9 +28,9 @@
   :error_code: 4102
   :description: 'User can not be deleted or updated due to user not found'
 4103:
-  :http_status: 401
+  :http_status: 403
   :error_code: 4103
-  :description: 'User can not be deleted or updated due to unauthorized request'
+  :description: 'User cannot perform this action due to unauthorized request'
 4104:
   :http_status: 422
   :error_code: 4104
@@ -39,6 +39,10 @@
   :http_status: 422
   :error_code: 4105
   :description: 'Cannot update user profile to invalid paramater'
+4106:
+  :http_status: 422
+  :error_code: 4106
+  :description: 'The email is already in use'
 4107:
   :http_status: 401
   :error_code: 4107
@@ -58,7 +62,7 @@
   :error_code: 4202
   :description: 'Product not found'
 4203:
-  :http_status: 401
+  :http_status: 403
   :error_code: 4203
   :description: 'Product can not be deleted or updated due to unauthorized request'
 4204:

@@ -8,7 +8,7 @@ RSpec.describe 'api/v1/users', type: :request do
   end
 
   def user
-    @user ||= create(:user)
+    @user ||= create(:user, :is_admin)
   end
 
   describe 'Users' do
@@ -17,19 +17,23 @@ RSpec.describe 'api/v1/users', type: :request do
         tags 'Users'
         description 'Get the user information.'
         produces 'application/json'
+        parameter name: :Authorization, in: :header, type: :string
         parameter name: :id, in: :path, type: :string
         response '200', 'User found' do
           let(:id) { user.id }
+          let(:Authorization) { authentication_token(user) }
 
           include_context 'with integration test'
         end
         response '404', 'User not found' do
           let(:id) { 0 }
+          let(:Authorization) { authentication_token(user) }
 
           include_context 'with integration test'
         end
         response '500', 'Internal server error' do
           let(:id) { 'invalid' }
+          let(:Authorization) { authentication_token(user) }
 
           document_response_without_test!
         end
@@ -41,6 +45,7 @@ RSpec.describe 'api/v1/users', type: :request do
         tags 'Users'
         description 'Create a user.'
         consumes 'application/json'
+        parameter name: :Authorization, in: :header, type: :string
         parameter name: :params, in: :body, schema: {
           type: :object,
           properties: {
@@ -57,16 +62,19 @@ RSpec.describe 'api/v1/users', type: :request do
         }
         response '201', 'User created' do
           let(:params) { { user: attributes_for(:user) } }
+          let(:Authorization) { authentication_token(user) }
 
           include_context 'with integration test'
         end
         response '422', 'Cannot create profile due to invalid paramater' do
           let(:params) { { user: { email: 'bad_email', password: 'asd' } } }
+          let(:Authorization) { authentication_token(user) }
 
           include_context 'with integration test'
         end
         response '500', 'Internal server error' do
           let(:params) { { user: { email: nil, password: nil } } }
+          let(:Authorization) { authentication_token(user) }
 
           document_response_without_test!
         end

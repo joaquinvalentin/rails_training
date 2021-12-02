@@ -16,19 +16,16 @@ class Api::V1::ProductsController < ApplicationController
 
   def create
     product = current_user.products.build(product_params)
-    if product.save
-      render json: ProductSerializer.render(product), status: :created
-    else
-      render_error(4200, product.errors.messages[:error])
-    end
+
+    return render json: ProductSerializer.render(product), status: :created if product.save
+
+    render_error(4200, product.errors.messages[:error])
   end
 
   def update
-    if product.update(product_params)
-        render json: ProductSerializer.render(product)
-      else
-        render_error(4201, product.errors.messages[:error])
-      end
+    return render json: ProductSerializer.render(product) if product.update(product_params)
+
+    render_error(4201, product.errors.messages[:error])
   end
 
   def destroy
