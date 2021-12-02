@@ -261,7 +261,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
       it 'returns the error message' do
         make_request
-        message_expected = 'Product can not be deleted or updated due to unauthorized request'
+        message_expected = 'Product can not be updated due to unauthorized request'
         expect(JSON.parse(response.body)['description']).to eql(message_expected)
       end
 
@@ -345,7 +345,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
       it 'returns the error message' do
         make_request
-        message_expected = 'Product can not be deleted or updated due to unauthorized request'
+        message_expected = 'Product can not be deleted due to unauthorized request'
         expect(JSON.parse(response.body)['description']).to eql(message_expected)
       end
 
@@ -354,9 +354,9 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(response).to have_http_status(:forbidden)
       end
 
-      it 'returns the error code 4203' do
+      it 'returns the error code 4206' do
         make_request
-        expect(JSON.parse(response.body)['error_code']).to be(4203)
+        expect(JSON.parse(response.body)['error_code']).to be(4206)
       end
     end
 
