@@ -4,6 +4,40 @@ info:
   title: API documentation for users
   version: v1
 paths:
+  "/api/v1/products/{id}":
+    get:
+      summary: Retrieve a product
+      tags:
+      - Products
+      description: Get the product information.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Product found
+          examples:
+            application/json:
+              id: 1
+              price: '32.84'
+              title: Rustic Leather Pants
+              user_id: 1
+        '404':
+          description: Product not found
+          examples:
+            application/json:
+              description: Product not found
+              details: Couldn't find Product with 'id'=0
+              error_code: 4104
+        '500':
+          description: Internal server error
   "/api/v1/tokens":
     post:
       summary: create
@@ -16,8 +50,8 @@ paths:
           description: User created
           examples:
             application/json:
-              token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc4NzE3MjB9.ptfPr2271Hye9h0kKW9D8vQmvQy-OBLYy3duleuu_E4
-              email: bong@beer.com
+              token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE2Mzc4NzM5MDR9.M7w7FYE-72hlp0jxzFitHZXn0pn0GPI4dLcK0r-EMu8
+              email: bradford@murphy.name
         '401':
           description: User not found
           examples:
@@ -61,8 +95,8 @@ paths:
           description: User found
           examples:
             application/json:
-              email: adrien@frami-oconner.net
-              id: 4
+              email: roy@yundt.info
+              id: 7
         '404':
           description: User not found
           examples:
@@ -92,8 +126,8 @@ paths:
           description: User updated
           examples:
             application/json:
-              email: arden_runte@blick.co
-              id: 6
+              email: josiah@ernser.co
+              id: 9
         '401':
           description: User can not be deleted or updated due to unauthorized
           examples:
@@ -162,8 +196,8 @@ paths:
           description: User created
           examples:
             application/json:
-              email: harrison.kozey@schmeler.io
-              id: 5
+              email: sid_berge@willms.info
+              id: 8
         '422':
           description: Cannot create profile due to invalid paramater
           examples:
