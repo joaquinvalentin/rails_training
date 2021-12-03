@@ -11,7 +11,7 @@ ActiveAdmin.register User do
   before_action :remove_password_params_if_blank, only: [:update]
   controller do
     def remove_password_params_if_blank
-      return if params[:user][:password].blank? && params[:user][:password_confirmation].blank?
+      return unless params[:user][:password].blank? && params[:user][:password_confirmation].blank?
 
       params[:user].delete(:password)
       params[:user].delete(:password_confirmation)
