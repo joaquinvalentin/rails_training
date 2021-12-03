@@ -18,7 +18,7 @@ FactoryBot.define do
     email { Faker::Internet.email }
     password { Faker::Internet.password }
 
-    trait :with_products do
+    trait :with_product do
       after(:create) do |user|
         create(:product, user: user)
       end

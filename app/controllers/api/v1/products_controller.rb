@@ -3,19 +3,22 @@
 class Api::V1::ProductsController < ApplicationController
   include Authenticable
 
-  before_action :check_login, only: %I[create]
-  before_action :check_owner, only: %I[update destroy]
+  before_action :check_login
+  before_action :check_permissions, only: %I[show update destroy]
 
   def index
-    render json: ProductSerializer.render(Product.all)
+    products = policy_scope(Product)
+    render json: ProductSerializer.render(products)
   end
 
   def show
+    authorize product
     render json: ProductSerializer.render(product)
   end
 
   def create
     product = current_user.products.build(product_params)
+    authorize product
 
     return render json: ProductSerializer.render(product), status: :created if product.save
 
@@ -37,14 +40,24 @@ class Api::V1::ProductsController < ApplicationController
     render_error(4202, exception.message)
   end
 
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
   private
+
+  def user_not_authorized(exception)
+    if current_user.admin?
+      render_error(4205, exception.message)
+    elsif exception.query == 'update?'
+      render_error(4203, exception.message)
+    elsif exception.query == 'destroy?'
+      render_error(4206, exception.message)
+    else
+      render_error(5000)
+    end
+  end
 
   def product_params
     params.require(:product).permit(:title, :price, :published)
-  end
-
-  def check_owner
-    render_error(4203) unless product.user_id == current_user&.id
   end
 
   def product
@@ -53,5 +66,9 @@ class Api::V1::ProductsController < ApplicationController
 
   def check_login
     render_error(4204) unless current_user
+  end
+
+  def check_permissions
+    authorize product
   end
 end

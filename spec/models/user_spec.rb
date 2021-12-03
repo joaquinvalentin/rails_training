@@ -18,8 +18,8 @@ RSpec.describe User, type: :model do
     @user ||= create(:user)
   end
 
-  def user_with_products
-    @user_with_products ||= create(:user, :with_products)
+  def user_with_product
+    @user_with_product ||= create(:user, :with_product)
   end
 
   context 'with taken email' do
@@ -33,8 +33,8 @@ RSpec.describe User, type: :model do
 
   context 'when destroy' do
     it 'destroy linked product' do
-      products = user_with_products.products
-      user_with_products.destroy
+      products = user_with_product.products
+      user_with_product.destroy
       products.each do |product|
         expect(Product.find_by(id: product.id).nil?).to be(true)
       end

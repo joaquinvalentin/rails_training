@@ -13,10 +13,7 @@ module Authenticable
                         decoded = JsonWebToken.decode(header.split(' ').last)
                         User.find(decoded[:user_id])
     rescue StandardError
-        raise AuthenticationError
+        return nil
     end
-  end
-
-  class AuthenticationError < StandardError
   end
 end

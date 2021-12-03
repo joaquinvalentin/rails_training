@@ -64,8 +64,16 @@
 4203:
   :http_status: 403
   :error_code: 4203
-  :description: 'Product can not be deleted or updated due to unauthorized request'
+  :description: 'Product can not be updated due to unauthorized request'
 4204:
-  :http_status: 403
+  :http_status: 401
   :error_code: 4204
   :description: 'Cannot perform this action over product due to unauthenticated request'
+4205:
+  :http_status: 403
+  :error_code: 4205
+  :description: 'Cannot perform this action over product due to unauthorized request'
+4206:
+  :http_status: 403
+  :error_code: 4206
+  :description: 'Product can not be deleted due to unauthorized request'
