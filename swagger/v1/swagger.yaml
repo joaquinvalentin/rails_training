@@ -4,6 +4,263 @@ info:
   title: API documentation for users
   version: v1
 paths:
+  "/api/v1/products/{id}":
+    get:
+      summary: Retrieve a product
+      tags:
+      - Products
+      description: Get the product information.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Product found
+          examples:
+            application/json:
+              id: 1
+              price: '0.16'
+              title: Enormous Wool Coat
+              user_id: 1
+        '401':
+          description: Unauthenticated
+          examples:
+            application/json:
+              description: Cannot perform this action over product due to unauthenticated
+                request
+              error_code: 4204
+        '403':
+          description: Unauthorized
+          examples:
+            application/json:
+              description: Cannot perform this action over product due to unauthorized
+                request
+              details: not allowed to show? this Product
+              error_code: 4205
+        '404':
+          description: Product not found
+          examples:
+            application/json:
+              description: Product not found
+              details: Couldn't find Product with 'id'=0
+              error_code: 4202
+        '500':
+          description: Internal server error
+    delete:
+      summary: Delete a product
+      tags:
+      - Products
+      description: Delete a product.
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Product deleted
+        '401':
+          description: Unauthenticated
+          examples:
+            application/json:
+              description: Cannot perform this action over product due to unauthenticated
+                request
+              error_code: 4204
+        '403':
+          description: Unauthorized
+          examples:
+            application/json:
+              description: Cannot perform this action over product due to unauthorized
+                request
+              details: not allowed to destroy? this Product
+              error_code: 4205
+        '404':
+          description: Product not found
+          examples:
+            application/json:
+              description: Product not found
+              details: Couldn't find Product with 'id'=0
+              error_code: 4202
+        '500':
+          description: Internal server error
+    put:
+      summary: Update a product
+      tags:
+      - Products
+      description: Update a product.
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Product updated
+          examples:
+            application/json:
+              id: 11
+              price: '66.23999999999999'
+              title: Practical Paper Table
+              user_id: 13
+        '400':
+          description: Bad parameter
+          examples:
+            application/json:
+              description: Product can not be updated due to bad request
+              error_code: 4201
+        '401':
+          description: Unauthenticated
+          examples:
+            application/json:
+              description: Cannot perform this action over product due to unauthenticated
+                request
+              error_code: 4204
+        '403':
+          description: Unauthorized
+          examples:
+            application/json:
+              description: Cannot perform this action over product due to unauthorized
+                request
+              details: not allowed to update? this Product
+              error_code: 4205
+        '500':
+          description: Internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    price:
+                      type: integer
+                    published:
+                      type: boolean
+                  required:
+                  - title
+                  - price
+                required:
+                - product
+  "/api/v1/products":
+    get:
+      summary: Retrieve the list of products
+      tags:
+      - Products
+      description: Get the list of products with their information.
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List returned
+          examples:
+            application/json:
+            - id: 16
+              price: '12.86'
+              title: Incredible Wooden Knife
+              user_id: 19
+        '401':
+          description: Unauthenticated
+          examples:
+            application/json:
+              description: Cannot perform this action over product due to unauthenticated
+                request
+              error_code: 4204
+        '403':
+          description: Unauthorized
+          examples:
+            application/json:
+              description: Cannot perform this action over product due to unauthorized
+                request
+              details: not allowed to  this NilClass
+              error_code: 4205
+        '500':
+          description: Internal server error
+    post:
+      summary: Create a product
+      tags:
+      - Products
+      description: Create a product.
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Product created
+          examples:
+            application/json:
+              id: 19
+              price: '14.35'
+              title: Sleek Copper Chair
+              user_id: 22
+        '400':
+          description: Bad parameter
+          examples:
+            application/json:
+              description: Product can not be created due to bad request
+              error_code: 4200
+        '401':
+          description: Unauthenticated
+          examples:
+            application/json:
+              description: Cannot perform this action over product due to unauthenticated
+                request
+              error_code: 4204
+        '403':
+          description: Unauthorized
+          examples:
+            application/json:
+              description: Cannot perform this action over product due to unauthorized
+                request
+              details: not allowed to create? this Product
+              error_code: 4205
+        '500':
+          description: Internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    price:
+                      type: integer
+                    published:
+                      type: boolean
+                  required:
+                  - title
+                  - price
+                required:
+                - product
   "/api/v1/tokens":
     post:
       summary: create
@@ -16,14 +273,14 @@ paths:
           description: User created
           examples:
             application/json:
-              token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc4NzE3MjB9.ptfPr2271Hye9h0kKW9D8vQmvQy-OBLYy3duleuu_E4
-              email: bong@beer.com
+              token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNiwiZXhwIjoxNjM4NjQxMDc4fQ.MHj7ToAIe_cUoNeRN-qDZDctAEXTR5I8fCatIs2-1hk
+              email: landon@hand.net
         '401':
           description: User not found
           examples:
             application/json:
-              description: User can not be deleted or updated due to unauthorized
-              error_code: 4011
+              description: Cannot authenticate user due to invalid credentials
+              error_code: 4003
         '500':
           description: Internal server error
       requestBody:
@@ -51,25 +308,43 @@ paths:
       - Users
       description: Get the user information.
       parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
       - name: id
         in: path
         required: true
         schema:
-          type: string
+          type: integer
       responses:
         '200':
           description: User found
           examples:
             application/json:
-              email: adrien@frami-oconner.net
-              id: 4
+              email: troy@fahey.com
+              id: 29
+        '401':
+          description: Unauthenticated
+          examples:
+            application/json:
+              description: Cannot perform this action over user due to unauthenticated
+                request
+              error_code: 4107
+        '403':
+          description: Unauthorized
+          examples:
+            application/json:
+              description: User cannot perform this action due to unauthorized request
+              details: not allowed to show? this User
+              error_code: 4103
         '404':
           description: User not found
           examples:
             application/json:
-              description: Not found
+              description: User not found
               details: Couldn't find User with 'id'=0
-              error_code: 4000
+              error_code: 4100
         '500':
           description: Internal server error
     put:
@@ -86,28 +361,36 @@ paths:
         in: path
         required: true
         schema:
-          type: string
+          type: integer
       responses:
         '200':
           description: User updated
           examples:
             application/json:
-              email: arden_runte@blick.co
-              id: 6
+              email: chloe.gutkowski@hyatt-gleichner.co
+              id: 40
         '401':
-          description: User can not be deleted or updated due to unauthorized
+          description: Unauthenticated
           examples:
             application/json:
-              description: User can not be deleted or updated due to unauthorized
-              error_code: 4011
+              description: Cannot perform this action over user due to unauthenticated
+                request
+              error_code: 4107
+        '403':
+          description: Unauthorized
+          examples:
+            application/json:
+              description: User cannot perform this action due to unauthorized request
+              details: not allowed to update? this User
+              error_code: 4103
         '422':
-          description: Cannot update profile due to invalid paramater
+          description: Bad parameter
           examples:
             application/json:
-              description: Cannot update profile due to invalid paramater
+              description: Cannot update user profile to invalid paramater
               details:
               - is not an email
-              error_code: 4023
+              error_code: 4105
         '500':
           description: Internal server error
       requestBody:
@@ -142,12 +425,19 @@ paths:
         in: path
         required: true
         schema:
-          type: string
+          type: integer
       responses:
         '204':
           description: User deleted
         '401':
-          description: User can not be deleted or updated due to unauthorized
+          description: Unauthenticated
+          examples:
+            application/json:
+              description: Cannot perform this action over user due to unauthenticated
+                request
+              error_code: 4107
+        '403':
+          description: Unauthorized
         '500':
           description: Internal server error
   "/api/v1/users":
@@ -156,22 +446,40 @@ paths:
       tags:
       - Users
       description: Create a user.
-      parameters: []
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
       responses:
         '201':
           description: User created
           examples:
             application/json:
-              email: harrison.kozey@schmeler.io
-              id: 5
-        '422':
-          description: Cannot create profile due to invalid paramater
+              email: lester_quigley@grimes-toy.co
+              id: 36
+        '401':
+          description: Unauthenticated
           examples:
             application/json:
-              description: Cannot create profile due to invalid paramater
+              description: Cannot perform this action over user due to unauthenticated
+                request
+              error_code: 4107
+        '403':
+          description: Unauthorized
+          examples:
+            application/json:
+              description: User cannot perform this action due to unauthorized request
+              details: not allowed to create? this User
+              error_code: 4103
+        '422':
+          description: Bad parameter
+          examples:
+            application/json:
+              description: Cannot create user due to invalid parameters
               details:
               - is not an email
-              error_code: 4022
+              error_code: 4104
         '500':
           description: Internal server error
       requestBody:
