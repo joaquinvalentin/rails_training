@@ -26,18 +26,120 @@ paths:
           examples:
             application/json:
               id: 1
-              price: '32.84'
-              title: Rustic Leather Pants
+              price: '99.84999999999999'
+              title: Incredible Leather Keyboard
               user_id: 1
+        '401':
+          description: Unauthenticated
+          examples:
+            application/json:
+              description: Cannot perform this action over product due to unauthenticated
+                request
+              error_code: 4204
+        '403':
+          description: Unauthorized
+          examples:
+            application/json:
+              description: Cannot perform this action over product due to unauthorized
+                request
+              details: not allowed to show? this Product
+              error_code: 4205
         '404':
           description: Product not found
           examples:
             application/json:
               description: Product not found
               details: Couldn't find Product with 'id'=0
-              error_code: 4104
+              error_code: 4202
         '500':
           description: Internal server error
+  "/api/v1/products":
+    get:
+      summary: Retrieve the list of products
+      tags:
+      - Products
+      description: Get the list of products with their information.
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List returned
+          examples:
+            application/json:
+            - id: 6
+              price: '10.21'
+              title: Intelligent Wool Shirt
+              user_id: 7
+        '401':
+          description: Unauthenticated
+          examples:
+            application/json:
+              description: Cannot perform this action over product due to unauthenticated
+                request
+              error_code: 4204
+        '403':
+          description: Unauthorized
+          examples:
+            application/json:
+              description: Cannot perform this action over product due to unauthorized
+                request
+              details: not allowed to  this NilClass
+              error_code: 4205
+        '500':
+          description: Internal server error
+    post:
+      summary: Create a product
+      tags:
+      - Products
+      description: Create a product.
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Product created
+          examples:
+            application/json:
+              id: 9
+              price: '92.98999999999999'
+              title: Mediocre Linen Plate
+              user_id: 10
+        '401':
+          description: Unauthenticated
+          examples:
+            application/json:
+              description: Cannot perform this action over product due to unauthenticated
+                request
+              error_code: 4204
+        '403':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    price:
+                      type: string
+                    published:
+                      type: string
+                  required:
+                  - title
+                  - price
+                required:
+                - product
   "/api/v1/tokens":
     post:
       summary: create
@@ -50,14 +152,14 @@ paths:
           description: User created
           examples:
             application/json:
-              token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE2Mzc4NzM5MDR9.M7w7FYE-72hlp0jxzFitHZXn0pn0GPI4dLcK0r-EMu8
-              email: bradford@murphy.name
+              token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMywiZXhwIjoxNjM4MzAwMjIzfQ.Kr7MppKvKZWPNCvvRLm027YtdLAHcjIpHX5mfqO8rOo
+              email: quentin_funk@haag-stokes.com
         '401':
           description: User not found
           examples:
             application/json:
-              description: User can not be deleted or updated due to unauthorized
-              error_code: 4011
+              description: Cannot authenticate user due to invalid credentials
+              error_code: 4003
         '500':
           description: Internal server error
       requestBody:
@@ -85,6 +187,10 @@ paths:
       - Users
       description: Get the user information.
       parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
       - name: id
         in: path
         required: true
@@ -95,15 +201,15 @@ paths:
           description: User found
           examples:
             application/json:
-              email: roy@yundt.info
-              id: 7
+              email: sherry.koepp@kessler-murazik.io
+              id: 16
         '404':
           description: User not found
           examples:
             application/json:
-              description: Not found
+              description: User not found
               details: Couldn't find User with 'id'=0
-              error_code: 4000
+              error_code: 4100
         '500':
           description: Internal server error
     put:
@@ -126,22 +232,23 @@ paths:
           description: User updated
           examples:
             application/json:
-              email: josiah@ernser.co
-              id: 9
+              email: melida@vandervort.info
+              id: 23
         '401':
           description: User can not be deleted or updated due to unauthorized
           examples:
             application/json:
-              description: User can not be deleted or updated due to unauthorized
-              error_code: 4011
+              description: Cannot perform this action over user due to unauthenticated
+                request
+              error_code: 4107
         '422':
           description: Cannot update profile due to invalid paramater
           examples:
             application/json:
-              description: Cannot update profile due to invalid paramater
+              description: Cannot update user profile to invalid paramater
               details:
               - is not an email
-              error_code: 4023
+              error_code: 4105
         '500':
           description: Internal server error
       requestBody:
@@ -190,22 +297,26 @@ paths:
       tags:
       - Users
       description: Create a user.
-      parameters: []
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
       responses:
         '201':
           description: User created
           examples:
             application/json:
-              email: sid_berge@willms.info
-              id: 8
+              email: brunilda@schmitt.name
+              id: 20
         '422':
           description: Cannot create profile due to invalid paramater
           examples:
             application/json:
-              description: Cannot create profile due to invalid paramater
+              description: Cannot create user due to invalid parameters
               details:
               - is not an email
-              error_code: 4022
+              error_code: 4104
         '500':
           description: Internal server error
       requestBody:
