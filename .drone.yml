@@ -49,7 +49,7 @@ steps:
     - Run tests
   when:
     branch:
-      - main
+      - master
     status:
       - success
     event:
