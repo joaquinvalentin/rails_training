@@ -162,24 +162,29 @@ RSpec.describe 'api/v1/products', type: :request do
         tags 'Products'
         description 'Get the list of products with their information.'
         produces 'application/json'
+        parameter name: :page, in: :path, type: :integer
         parameter name: :Authorization, in: :header, type: :string
         response '200', 'List returned' do
           let(:Authorization) { authentication_token(user) }
+          let(:page) { 1 }
 
           include_context 'with integration test'
         end
         response '401', 'Unauthenticated' do
           let(:Authorization) { nil }
+          let(:page) { 1 }
 
           include_context 'with integration test'
         end
         response '403', 'Unauthorized' do
           let(:Authorization) { authentication_token(admin) }
+          let(:page) { 1 }
 
           include_context 'with integration test'
         end
         response '500', 'Internal server error' do
           let(:Authorization) { authentication_token(user) }
+          let(:page) { 1 }
 
           document_response_without_test!
         end

@@ -26,8 +26,8 @@ paths:
           examples:
             application/json:
               id: 1
-              price: '0.16'
-              title: Enormous Wool Coat
+              price: '53.47'
+              title: Mediocre Leather Bottle
               user_id: 1
         '401':
           description: Unauthenticated
@@ -116,8 +116,8 @@ paths:
           examples:
             application/json:
               id: 11
-              price: '66.23999999999999'
-              title: Practical Paper Table
+              price: '83.77'
+              title: Fantastic Linen Bench
               user_id: 13
         '400':
           description: Bad parameter
@@ -169,6 +169,11 @@ paths:
       - Products
       description: Get the list of products with their information.
       parameters:
+      - name: page
+        in: path
+        required: true
+        schema:
+          type: integer
       - name: Authorization
         in: header
         schema:
@@ -179,8 +184,8 @@ paths:
           examples:
             application/json:
             - id: 16
-              price: '12.86'
-              title: Incredible Wooden Knife
+              price: '2.45'
+              title: Sleek Cotton Bag
               user_id: 19
         '401':
           description: Unauthenticated
@@ -215,8 +220,8 @@ paths:
           examples:
             application/json:
               id: 19
-              price: '14.35'
-              title: Sleek Copper Chair
+              price: '39.24'
+              title: Small Bronze Clock
               user_id: 22
         '400':
           description: Bad parameter
@@ -273,8 +278,8 @@ paths:
           description: User created
           examples:
             application/json:
-              token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNiwiZXhwIjoxNjM4NjQxMDc4fQ.MHj7ToAIe_cUoNeRN-qDZDctAEXTR5I8fCatIs2-1hk
-              email: landon@hand.net
+              token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNiwiZXhwIjoxNjM4OTA0NDkxfQ.8KzW4GSDU1JVZZegxnBaCPioy1zcrftgrEOf2MYUfW4
+              email: leanne.volkman@swaniawski.co
         '401':
           description: User not found
           examples:
@@ -322,7 +327,7 @@ paths:
           description: User found
           examples:
             application/json:
-              email: troy@fahey.com
+              email: gerald_morissette@conn.name
               id: 29
         '401':
           description: Unauthenticated
@@ -367,7 +372,7 @@ paths:
           description: User updated
           examples:
             application/json:
-              email: chloe.gutkowski@hyatt-gleichner.co
+              email: rolland_durgan@mohr-price.com
               id: 40
         '401':
           description: Unauthenticated
@@ -456,7 +461,7 @@ paths:
           description: User created
           examples:
             application/json:
-              email: lester_quigley@grimes-toy.co
+              email: season_zieme@baumbach.org
               id: 36
         '401':
           description: Unauthenticated
