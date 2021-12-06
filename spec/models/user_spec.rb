@@ -25,7 +25,7 @@ RSpec.describe User, type: :model do
   context 'with taken email' do
     it 'will be invalid' do
       other_user = user
-      user = described_class.new(email: other_user.email, password_digest:
+      user = described_class.new(email: other_user.email, password:
       'test')
       expect(user.valid?).to be(false)
     end
