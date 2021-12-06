@@ -320,6 +320,7 @@ DEPENDENCIES
   factory_bot_rails (~> 6.2.0)
   faker (~> 2.19.0)!
   jwt (~> 2.3)
+  kaminari
   listen (~> 3.3)
   pg (~> 1.1)
   puma (~> 5.0)
