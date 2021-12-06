@@ -37,6 +37,25 @@ steps:
   depends_on:
     - bundler setup
 
+- name: deploy to Heroku
+  image: ruby:3.0.2
+  environment:
+    HEROKU_API_KEY:
+      from_secret: HEROKU_API_KEY
+  commands:
+    - git push https://heroku:$HEROKU_API_KEY@git.heroku.com/jv-training.git ${DRONE_BRANCH}:main
+  depends_on:
+    - Run linter
+    - Run tests
+  when:
+    branch:
+      - master
+    status:
+      - success
+    event:
+      - push
+
+
 services: 
 - name: postgres-service
   image: postgres:13.4
