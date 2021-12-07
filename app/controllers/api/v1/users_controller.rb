@@ -16,8 +16,7 @@ class Api::V1::UsersController < ApplicationController
     return render_error(4106) if user_by_email
 
     if user.save
-      UserMailer.with(user: user, admin: current_user.email).welcome_email.deliver_now
-
+      send_email user
       return render json: UserSerializer.render(user), status: :created
     end
 
@@ -70,5 +69,9 @@ class Api::V1::UsersController < ApplicationController
 
   def check_login
     render_error(4107) unless current_user
+  end
+
+  def send_email(user)
+    UserMailer.with(user: user, admin: current_user.email).welcome_email.deliver_now
   end
 end
