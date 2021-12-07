@@ -15,7 +15,11 @@ class Api::V1::UsersController < ApplicationController
     authorize user
     return render_error(4106) if user_by_email
 
-    return render json: UserSerializer.render(user), status: :created if user.save
+    if user.save
+      UserMailer.with(user: user).welcome_email.deliver_later
+
+      return render json: UserSerializer.render(user), status: :created
+    end
 
     render_error(4104, user.errors.messages[:error])
   end
