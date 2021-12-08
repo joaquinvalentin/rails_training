@@ -13,7 +13,7 @@ ActiveAdmin.register User do
     end
 
     def create
-      CreateUser.call(user_params: params[:user].permit(:email, :password, :admin), creator: current_user)
+      WelcomeEmailWorker.perform_async(user_params: params[:user].permit(:email, :password, :admin), creator: current_user)
     end
   end
 
