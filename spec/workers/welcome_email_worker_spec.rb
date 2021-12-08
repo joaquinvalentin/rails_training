@@ -1,7 +1,24 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'sidekiq/testing'
+Sidekiq::Testing.fake!
 
 RSpec.describe WelcomeEmailWorker, type: :worker do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:user) { create(:user) }
+  let(:admin) { create(:user, :is_admin) }
+
+  describe 'testing worker' do
+    it 'WelcomeEmailWorker jobs are enqueued in the scheduled queue' do
+      described_class.perform_async
+      expect(described_class.queue).equal?(:default)
+    end
+
+    it 'goes into the jobs array for testing environment' do
+      expect do
+        described_class.perform_async
+      end.to change(described_class.jobs, :size).by(1)
+      described_class.new.perform(user.email, admin.email)
+    end
+  end
 end
