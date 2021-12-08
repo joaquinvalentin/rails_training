@@ -2,13 +2,14 @@
 
 class Api::V1::ProductsController < ApplicationController
   include Authenticable
+  include Paginated
 
   before_action :check_login
   before_action :check_permissions, only: %I[show update destroy]
 
   def index
     products = policy_scope(Product)
-    render json: ProductSerializer.render(products)
+    render json: ProductSerializer.render(paginate(products))
   end
 
   def show

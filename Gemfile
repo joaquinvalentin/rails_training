@@ -96,3 +96,5 @@ gem 'activeadmin', '~> 2.9.0'
 gem 'sass-rails', '~> 6.0.0'
 
 gem 'devise', '~> 4.8.0'
+
+gem 'kaminari'

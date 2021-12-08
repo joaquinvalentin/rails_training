@@ -114,6 +114,27 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         title = user.products.first.title
         expect(JSON.parse(response.body).first['title']).to eql(title)
       end
+
+      it 'returns the total of pages' do
+        make_request
+        expect(response.headers['X-total-pages']).to be(1)
+      end
+
+      it 'returns the total per page' do
+        make_request
+        expect(response.headers['X-per-page']).to be(10)
+      end
+
+      it 'returns the total of products' do
+        make_request
+        expect(response.headers['X-total-entities']).to be(1)
+      end
+
+      it 'the number of products retrieved is less than X-per-pages' do
+        make_request
+        cant_prods = JSON.parse(response.body).count
+        expect(response.headers['X-per-page']).to be >= cant_prods
+      end
     end
 
     context 'when the user does not have permissions' do
