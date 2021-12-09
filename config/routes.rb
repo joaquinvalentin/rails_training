@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       resources :users, only: %i[show create update destroy]
       resources :tokens, only: %i[create]
       resources :products, only: %i[index show create update destroy]
-      post 'products/:id/transfer', to: 'products#transfer'
+      post 'products/:id/transfer', to: 'products#transfer', as: :transfer
     end
   end
 end

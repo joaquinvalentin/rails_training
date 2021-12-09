@@ -41,7 +41,7 @@ class Api::V1::ProductsController < ApplicationController
     return render_error(4209) unless new_owner
 
     status = TransferProduct.new(product: product, new_owner: new_owner, current_owner: current_user).call
-    return render_error(status) if status
+    return render_error(status) unless status == true
 
     render json: ProductSerializer.render(product)
   end
