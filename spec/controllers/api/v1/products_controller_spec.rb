@@ -412,13 +412,35 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
     def make_request(product, target_user)
       authenticate_user(user)
-      post :transfer, params: { id: product.id, email: target_user.email }
+      post :transfer, params: { id: product, email: target_user }
     end
 
     context 'when is successful' do
       it 'returns the product of the target user' do
-        make_request(user.products.first, target_user)
+        make_request(user.products.first.id, target_user.email)
         expect(JSON.parse(response.body)['user_id']).to eql(target_user.products.first.user_id)
+      end
+    end
+
+    context 'when product is invalid' do
+      it 'returns the error code 4207' do
+        prod = create(:user, :with_product).products.first
+        make_request(prod.id, target_user.email)
+        expect(JSON.parse(response.body)['error_code']).to be(4207)
+      end
+    end
+
+    context 'when target user is admin' do
+      it 'returns the error code 4208' do
+        make_request(user.products.first, admin.email)
+        expect(JSON.parse(response.body)['error_code']).to be(4208)
+      end
+    end
+
+    context 'when target user is invalid' do
+      it 'returns the error code 4209' do
+        make_request(user.products.first, 'lfkjdsakl@email.com')
+        expect(JSON.parse(response.body)['error_code']).to be(4209)
       end
     end
   end
