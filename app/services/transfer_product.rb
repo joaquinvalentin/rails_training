@@ -2,6 +2,7 @@
 
 class TransferProduct < ServiceObject
   def initialize(product:, current_owner:, new_owner:)
+    super()
     @product = product
     @new_owner = new_owner
     @current_owner = current_owner
