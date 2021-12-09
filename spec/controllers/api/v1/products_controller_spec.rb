@@ -404,4 +404,22 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       end
     end
   end
+
+  describe 'POST #transfer' do
+    def target_user
+      @target_user ||= create(:user)
+    end
+
+    def make_request(product, target_user)
+      authenticate_user(user)
+      post :transfer, params: { id: product.id, email: target_user.email }
+    end
+
+    context 'when is successful' do
+      it 'returns the product of the target user' do
+        make_request(user.products.first, target_user)
+        expect(JSON.parse(response.body)['user_id']).to eql(target_user.products.first.user_id)
+      end
+    end
+  end
 end
