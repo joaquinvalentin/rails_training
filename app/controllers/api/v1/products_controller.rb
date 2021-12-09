@@ -37,6 +37,15 @@ class Api::V1::ProductsController < ApplicationController
     head :no_content
   end
 
+  def transfer
+    return render_error(4209) unless new_owner
+
+    status = TransferProduct.new(product: product, new_owner: new_owner, current_owner: current_user).call
+    return render_error(status) if status
+
+    render json: ProductSerializer.render(product)
+  end
+
   rescue_from ActiveRecord::RecordNotFound do |exception|
     render_error(4202, exception.message)
   end
@@ -55,6 +64,10 @@ class Api::V1::ProductsController < ApplicationController
     else
       render_error(5000)
     end
+  end
+
+  def new_owner
+    @new_owner ||= User.find_by_email(params[:email])
   end
 
   def product_params
