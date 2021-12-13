@@ -86,6 +86,6 @@
   :error_code: 4208
   :description: 'Product cannot be transferred due to a problem with the target user'
 4209:
-  :http_status: 422
+  :http_status: 404
   :error_code: 4209
   :description: 'Product cannot be transferred due to the target user cannot be found'

@@ -428,6 +428,12 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         make_request(prod.id, target_user.email)
         expect(JSON.parse(response.body)['error_code']).to be(4207)
       end
+
+      it 'return forbidden' do
+        prod = create(:user, :with_product).products.first
+        make_request(prod.id, target_user.email)
+        expect(response).to have_http_status(:forbidden)
+      end
     end
 
     context 'when target user is admin' do
@@ -435,12 +441,22 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         make_request(user.products.first, admin.email)
         expect(JSON.parse(response.body)['error_code']).to be(4208)
       end
+
+      it 'return unprocessable entity' do
+        make_request(user.products.first, admin.email)
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
     end
 
     context 'when target user is invalid' do
       it 'returns the error code 4209' do
         make_request(user.products.first, 'lfkjdsakl@email.com')
         expect(JSON.parse(response.body)['error_code']).to be(4209)
+      end
+
+      it 'return not found' do
+        make_request(user.products.first, 'lfkjdsakl@email.com')
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
