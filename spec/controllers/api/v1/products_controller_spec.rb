@@ -434,6 +434,13 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         make_request(prod.id, target_user.email)
         expect(response).to have_http_status(:forbidden)
       end
+
+      it 'returns the error message' do
+        prod = create(:user, :with_product).products.first
+        make_request(prod.id, target_user.email)
+        error_message = 'Product cannot be transferred due to unauthorized request'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
     end
 
     context 'when target user is admin' do
@@ -446,6 +453,12 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         make_request(user.products.first, admin.email)
         expect(response).to have_http_status(:unprocessable_entity)
       end
+
+      it 'returns the error message' do
+        make_request(user.products.first, admin.email)
+        error_message = 'Product cannot be transferred due to a problem with the target user'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
     end
 
     context 'when target user is invalid' do
@@ -457,6 +470,12 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       it 'return not found' do
         make_request(user.products.first, 'lfkjdsakl@email.com')
         expect(response).to have_http_status(:not_found)
+      end
+
+      it 'returns the error message' do
+        make_request(user.products.first, 'lfkjdsakl@email.com')
+        error_message = 'Product cannot be transferred due to the target user cannot be found'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
     end
   end
