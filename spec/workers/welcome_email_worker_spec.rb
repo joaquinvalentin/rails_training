@@ -18,7 +18,6 @@ RSpec.describe WelcomeEmailWorker, type: :worker do
       expect do
         described_class.perform_async
       end.to change(described_class.jobs, :size).by(1)
-      described_class.new.perform(user.email, admin.email)
     end
   end
 end

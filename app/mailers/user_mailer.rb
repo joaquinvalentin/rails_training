@@ -2,8 +2,8 @@
 
 class UserMailer < ApplicationMailer
   def welcome_email
-    @user = params[:user]
+    @user_email = params[:user]
     @url = 'http://example.com/login'
-    mail(from: params[:admin], to: @user, subject: 'Welcome to My Awesome Site')
+    mail(from: params[:admin], to: @user_email, subject: 'Welcome to My Awesome Site')
   end
 end
