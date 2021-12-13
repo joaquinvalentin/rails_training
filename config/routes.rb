@@ -10,8 +10,11 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users, only: %i[show create update destroy]
       resources :tokens, only: %i[create]
-      resources :products, only: %i[index show create update destroy]
-      post 'products/:id/transfer', to: 'products#transfer', as: :transfer
+      resources :products, only: %i[index show create update destroy] do
+        member do
+          post ':id/transfer', to: 'products#transfer', as: :transfer
+        end
+      end
     end
   end
 end
