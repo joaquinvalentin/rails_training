@@ -40,8 +40,9 @@ class Api::V1::ProductsController < ApplicationController
   def transfer
     return render_error(4209) unless new_owner
 
-    status = TransferProduct.new(product: product, new_owner: new_owner, current_owner: current_user).call
-    return render_error(status) unless status == true
+    service = transfer_product_service.call(product: product, new_owner: new_owner, current_owner: current_user)
+
+    return render_error(service.error_code) if service.error?
 
     render json: ProductSerializer.render(product)
   end
@@ -84,5 +85,9 @@ class Api::V1::ProductsController < ApplicationController
 
   def check_permissions
     authorize product
+  end
+
+  def transfer_product_service
+    @transfer_product_service ||= TransferProduct
   end
 end
