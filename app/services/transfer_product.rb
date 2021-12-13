@@ -11,19 +11,17 @@ class TransferProduct < ServiceObject
 
   def call
     @status = :error
-    return @error_code = 4207 unless ProductPolicy.new(current_owner, product).transfer_from?
-    return @error_code = 4208 unless ProductPolicy.new(new_owner, product).transfer_to?
+    return @error_code = 4207 unless ProductPolicy.new(@current_owner, @product).transfer_from?
+    return @error_code = 4208 unless ProductPolicy.new(@new_owner, @product).transfer_to?
 
     transfer_product
   end
 
   private
 
-  attr_reader :new_owner, :product, :current_owner
-
   def transfer_product
-    product.user_id = new_owner.id
-    product.save!
+    @product.user_id = @new_owner.id
+    @product.save!
     @status = :success
   end
 end
