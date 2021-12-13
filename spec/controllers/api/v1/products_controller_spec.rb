@@ -416,9 +416,21 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
     end
 
     context 'when is successful' do
-      it 'returns the product of the target user' do
+      it 'returns the product' do
+        title = user.products.first.title
+        make_request(user.products.first.id, target_user.email)
+        expect(JSON.parse(response.body)['title']).to eql(title)
+      end
+
+      it 'returns the new owner of the product' do
         make_request(user.products.first.id, target_user.email)
         expect(JSON.parse(response.body)['user_id']).to eql(target_user.products.first.user_id)
+      end
+
+      it 'return forbidden' do
+        prod = create(:user, :with_product).products.first
+        make_request(prod.id, target_user.email)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
