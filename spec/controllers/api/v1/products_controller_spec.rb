@@ -410,9 +410,9 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       @target_user ||= create(:user)
     end
 
-    def make_request(product, target_user)
+    def make_request(product, target_email)
       authenticate_user(user)
-      post :transfer, params: { id: product, email: target_user }
+      post :transfer, params: { id: product, email: target_email }
     end
 
     context 'when is successful' do

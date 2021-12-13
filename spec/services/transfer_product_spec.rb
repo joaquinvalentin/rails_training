@@ -19,8 +19,8 @@ RSpec.describe TransferProduct, type: :service do
     @admin ||= create(:user, :is_admin)
   end
 
-  def call_service(owner, target, product)
-    TransferProduct.new(product: product, new_owner: target, current_owner: owner).call
+  def call_service(owner, target_email, product)
+    TransferProduct.new(product: product, new_owner: target_email, current_owner: owner).call
   end
 
   context 'when the transfer is valid' do
