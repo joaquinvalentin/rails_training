@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 ActionMailer::Base.smtp_settings = {
-  domain: 'jv-training.herokuapp.com',
-  address: 'smtp.sendgrid.net',
-  port: 587,
+  domain: Rails.application.config.domain,
+  address: Rails.application.config.smtp_address,
+  port: Rails.application.config.smtp_port,
   authentication: :plain,
-  user_name: 'apikey',
-  password: ENV['SENDGRID_API_KEY']
+  user_name: Rails.application.config.smtp_user_name,
+  password: Rails.application.config.smtp_password
 }
