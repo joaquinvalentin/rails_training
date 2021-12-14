@@ -66,10 +66,6 @@ class Api::V1::UsersController < ApplicationController
     render_error(4107) unless current_user
   end
 
-  def send_email(user)
-    UserMailer.with(user: user, admin: current_user.email).welcome_email.deliver_now
-  end
-
   def create_user_service
     @create_user_service ||= CreateUser
   end
