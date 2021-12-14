@@ -11,16 +11,11 @@ class Api::V1::UsersController < ApplicationController
 
   # POST /users
   def create
-    user = User.new(user_params)
-    authorize user
-    return render_error(4106) if user_by_email
+    service = create_user_service.call(user_params: user_params, creator: current_user)
 
-    if user.save
-      send_email user
-      return render json: UserSerializer.render(user), status: :created
-    end
+    return render_error(service.error_code) unless service.success?
 
-    render_error(4104, user.errors.messages[:error])
+    render json: UserSerializer.render(service.user), status: :created
   end
 
   # PATCH/PUT /users/1
@@ -73,5 +68,9 @@ class Api::V1::UsersController < ApplicationController
 
   def send_email(user)
     UserMailer.with(user: user, admin: current_user.email).welcome_email.deliver_now
+  end
+
+  def create_user_service
+    @create_user_service ||= CreateUser
   end
 end
