@@ -6,7 +6,6 @@ class TransferProduct < ServiceObject
     @product = args[0][:product]
     @new_owner = args[0][:new_owner]
     @current_owner = args[0][:current_owner]
-    @error = false
   end
 
   def call
