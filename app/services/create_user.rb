@@ -31,6 +31,6 @@ class CreateUser < ServiceObject
   end
 
   def send_email
-    UserMailer.with(user: @user, admin: @creator).welcome_email.deliver_now
+    WelcomeEmailWorker.perform_async(@user, @creator)
   end
 end
