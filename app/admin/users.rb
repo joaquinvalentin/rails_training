@@ -11,6 +11,10 @@ ActiveAdmin.register User do
       params[:user].delete(:password)
       params[:user].delete(:password_confirmation)
     end
+
+    def create
+      CreateUser.call(user_params: params[:user].permit(:email, :password, :admin), creator: current_user)
+    end
   end
 
   form do |f|

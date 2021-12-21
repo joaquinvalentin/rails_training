@@ -11,13 +11,11 @@ class Api::V1::UsersController < ApplicationController
 
   # POST /users
   def create
-    user = User.new(user_params)
-    authorize user
-    return render_error(4106) if user_by_email
+    service = create_user_service.call(user_params: user_params, creator: current_user)
 
-    return render json: UserSerializer.render(user), status: :created if user.save
+    return render_error(service.error_code) unless service.success?
 
-    render_error(4104, user.errors.messages[:error])
+    render json: UserSerializer.render(service.user), status: :created
   end
 
   # PATCH/PUT /users/1
@@ -49,7 +47,7 @@ class Api::V1::UsersController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def user_params
-    params.require(:user).permit(:email, :password)
+    params.require(:user).permit(:email, :password, :admin)
   end
 
   def user
@@ -66,5 +64,9 @@ class Api::V1::UsersController < ApplicationController
 
   def check_login
     render_error(4107) unless current_user
+  end
+
+  def create_user_service
+    @create_user_service ||= CreateUser
   end
 end

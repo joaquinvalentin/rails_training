@@ -42,6 +42,12 @@ module Training
 
     config.database_url = ENV.fetch('DATABASE_URL')
 
+    config.smtp_user_name = ENV.fetch('SMTP_USER_NAME')
+    config.smtp_password = ENV.fetch('SMTP_PASSWORD')
+    config.domain = ENV.fetch('DOMAIN')
+    config.smtp_address = ENV.fetch('SMTP_ADDRESS')
+    config.smtp_port = ENV.fetch('SMTP_PORT')
+
     # Autoload lib folder
     config.eager_load_paths << Rails.root.join('lib')
     if Rails.env.test?

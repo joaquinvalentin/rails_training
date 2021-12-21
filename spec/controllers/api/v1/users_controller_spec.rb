@@ -168,7 +168,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       it 'returns a error' do
         call_from_admin
-        expect(JSON.parse(response.body)['details']).to eql(['is not an email'])
+        error_message = 'Cannot create user due to invalid parameters'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
       end
     end
 

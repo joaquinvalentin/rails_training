@@ -98,3 +98,5 @@ gem 'sass-rails', '~> 6.0.0'
 gem 'devise', '~> 4.8.0'
 
 gem 'kaminari'
+
+gem 'letter_opener', group: :development
