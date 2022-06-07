@@ -404,4 +404,90 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       end
     end
   end
+
+  describe 'POST #transfer' do
+    def target_user
+      @target_user ||= create(:user)
+    end
+
+    def make_request(product, target_email)
+      authenticate_user(user)
+      post :transfer, params: { id: product, email: target_email }
+    end
+
+    context 'when is successful' do
+      it 'returns the product' do
+        title = user.products.first.title
+        make_request(user.products.first.id, target_user.email)
+        expect(JSON.parse(response.body)['title']).to eql(title)
+      end
+
+      it 'returns the new owner of the product' do
+        make_request(user.products.first.id, target_user.email)
+        expect(JSON.parse(response.body)['user_id']).to eql(target_user.products.first.user_id)
+      end
+
+      it 'return success' do
+        make_request(user.products.first.id, target_user.email)
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    context 'when product is invalid' do
+      it 'returns the error code 4207' do
+        prod = create(:user, :with_product).products.first
+        make_request(prod.id, target_user.email)
+        expect(JSON.parse(response.body)['error_code']).to be(4207)
+      end
+
+      it 'return forbidden' do
+        prod = create(:user, :with_product).products.first
+        make_request(prod.id, target_user.email)
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it 'returns the error message' do
+        prod = create(:user, :with_product).products.first
+        make_request(prod.id, target_user.email)
+        error_message = 'Product cannot be transferred due to unauthorized request'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
+    end
+
+    context 'when target user is admin' do
+      it 'returns the error code 4208' do
+        make_request(user.products.first, admin.email)
+        expect(JSON.parse(response.body)['error_code']).to be(4208)
+      end
+
+      it 'return unprocessable entity' do
+        make_request(user.products.first, admin.email)
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it 'returns the error message' do
+        make_request(user.products.first, admin.email)
+        error_message = 'Product cannot be transferred due to a problem with the target user'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
+    end
+
+    context 'when target user is invalid' do
+      it 'returns the error code 4209' do
+        make_request(user.products.first, 'lfkjdsakl@email.com')
+        expect(JSON.parse(response.body)['error_code']).to be(4209)
+      end
+
+      it 'return not found' do
+        make_request(user.products.first, 'lfkjdsakl@email.com')
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it 'returns the error message' do
+        make_request(user.products.first, 'lfkjdsakl@email.com')
+        error_message = 'Product cannot be transferred due to the target user cannot be found'
+        expect(JSON.parse(response.body)['description']).to eql(error_message)
+      end
+    end
+  end
 end

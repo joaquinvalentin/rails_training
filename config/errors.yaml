@@ -77,3 +77,15 @@
   :http_status: 403
   :error_code: 4206
   :description: 'Product can not be deleted due to unauthorized request'
+4207:
+  :http_status: 403
+  :error_code: 4207
+  :description: 'Product cannot be transferred due to unauthorized request'
+4208:
+  :http_status: 422
+  :error_code: 4208
+  :description: 'Product cannot be transferred due to a problem with the target user'
+4209:
+  :http_status: 404
+  :error_code: 4209
+  :description: 'Product cannot be transferred due to the target user cannot be found'

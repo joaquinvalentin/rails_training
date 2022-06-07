@@ -28,6 +28,14 @@ class ProductPolicy
     !user.admin? && record.user_id == user&.id
   end
 
+  def transfer_from?
+    !user.admin? && record.user_id == user&.id
+  end
+
+  def transfer_to?
+    !user.admin? && record.user_id != user&.id
+  end
+
   class Scope
     def initialize(user, scope)
       @user = user

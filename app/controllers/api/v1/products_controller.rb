@@ -37,6 +37,16 @@ class Api::V1::ProductsController < ApplicationController
     head :no_content
   end
 
+  def transfer
+    return render_error(4209) unless new_owner
+
+    service = transfer_product_service.call(product: product, new_owner: new_owner, current_owner: current_user)
+
+    return render_error(service.error_code) if service.error?
+
+    render json: ProductSerializer.render(product)
+  end
+
   rescue_from ActiveRecord::RecordNotFound do |exception|
     render_error(4202, exception.message)
   end
@@ -57,6 +67,10 @@ class Api::V1::ProductsController < ApplicationController
     end
   end
 
+  def new_owner
+    @new_owner ||= User.find_by_email(params[:email])
+  end
+
   def product_params
     params.require(:product).permit(:title, :price, :published)
   end
@@ -71,5 +85,9 @@ class Api::V1::ProductsController < ApplicationController
 
   def check_permissions
     authorize product
+  end
+
+  def transfer_product_service
+    @transfer_product_service ||= TransferProduct
   end
 end
